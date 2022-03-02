@@ -52,4 +52,4 @@ CREATE TABLE `product_tag` (
   FOREIGN KEY (`product_id`) REFERENCES `product`(`id`),
   FOREIGN KEY (`tag_id`) REFERENCES `tag`(`id`),
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
--- -----------------------------------------------------
+-- --------------------------------------------------
