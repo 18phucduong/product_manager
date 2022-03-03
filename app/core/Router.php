@@ -42,7 +42,18 @@ class Router {
 		$request_method = $this->get_request_method();
 		$routes = $this->routers;
 
-	
+		foreach( $routes as $route) {
+			list( $method, $url, $action ) = $route;
+			if( strpos( $request_method, $method) === FALSE ) 	continue;
+			if( strcmp( strtolower( $request_url ),  strtolower( $url ) ) === 0 ){
+				if( is_callable( $action ) ) {				
+					$action();
+				}
+				return;
+			}else {
+				continue;
+			}
+		}
 
 	}
 

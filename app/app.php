@@ -14,7 +14,7 @@ class App {
 			echo "return admin view";
 		});
 		$this->router->get('/login', function() {
-			require_once "views/login.php";
+			require_once "views/login.php" ;
 		});
 		
 		$this->router->get('/product/new', function() {
