@@ -40,12 +40,20 @@ class Router {
 	public function map_routers() {
 		$request_url = $this->get_request_url();
 		$request_method = $this->get_request_method();
-
 		$routes = $this->routers;
 
-		echo "<pre>";
-		print_r($routes);
-		echo "</pre>";
+		foreach( $routes as $route) {
+			list( $method, $url, $action ) = $route;
+			if( strpos( $request_method, $method) === FALSE ) 	continue;
+			if( strcmp( strtolower( $request_url ),  strtolower( $url ) ) === 0 ){
+				if( is_callable( $action ) ) {				
+					$action();
+				}
+				return;
+			}else {
+				continue;
+			}
+		}
 
 	}
 
