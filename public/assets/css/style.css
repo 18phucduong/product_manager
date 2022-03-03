@@ -1,8 +1,40 @@
-* {
+*{
     box-sizing: border-box;
 }
+body,
+ul,
+li {
+    margin: 0;
+    padding: 0;
+}
+h1 {
+    font-size: 1.875rem;
+}
+h2 {
+    font-size: 1.5rem;
+}
+img {
+    max-width: 100%;
+    object-fit: cover;
+}
+a {
+    text-decoration: none;
+}
+input{
+    display: inline-block;
+    width: 100%;
+    padding: 0 15px;
+    border: none;
+    outline: none;
+    box-shadow: unset;
+    line-height: 3.2; 
+    background-color: transparent;
+}
+input[type="checkbox"] {
+    width: fit-content;
+}
 .wrapper.login-page {
-    background-color: aqua;
+    background-color: #ebebeb;
 }
 .container {
     max-width: 1200px;
@@ -12,7 +44,15 @@
 .row {
     display: flex;
     flex-wrap: wrap;
-    width: 100%;
+    margin: 0 -15px;
+}
+.row.row-collapse {
+    margin-left: 0;
+    margin-right: 0;
+}
+.row-collapse > .col {
+    padding-left: 0;
+    padding-right: 0;
 }
 .col {
     padding: 0 15px;
@@ -65,50 +105,323 @@
     flex-basis: 100%;
     max-width: 100%;
 }
+@media screen and (max-width: 30rem) {
+    .col.sm-1 {
+        flex-basis: 8.333%;
+        max-width: 8.333%;
+    }
+    .col.sm-2 {
+        flex-basis: 16.666%;
+        max-width: 16.666%;
+    }
+    .col.sm-3 {
+        flex-basis: 25%;
+        max-width: 25%;
+    }
+    .col.sm-4 {
+        flex-basis: 33.333%;
+        max-width: 33.333%;
+    }
+    .col.sm-5 {
+        flex-basis: 41.666%;
+        max-width: 41.666%;
+    }
+    .col.sm-6 {
+        flex-basis: 50%;
+        max-width: 50%;
+    }
+    .col.sm-7 {
+        flex-basis: 58.333%;
+        max-width: 58.333%;
+    }
+    .col.sm-8 {
+        flex-basis: 66.666%;
+        max-width: 66.666%;
+    }
+    .col.sm-9 {
+        flex-basis: 75%;
+        max-width: 75%;
+    }
+    .col.sm-10 {
+        flex-basis: 83.333%;
+        max-width: 83.333%;
+    }
+    .col.sm-11 {
+        flex-basis: 91.666%;
+        max-width: 91.666%;
+    }
+    .col.sm-12 {
+        flex-basis: 100%;
+        max-width: 100%;
+    }
+}
+@media screen and (max-width: 48rem) {
+    .col.md-1 {
+        flex-basis: 8.333%;
+        max-width: 8.333%;
+    }
+    .col.md-2 {
+        flex-basis: 16.666%;
+        max-width: 16.666%;
+    }
+    .col.md-3 {
+        flex-basis: 25%;
+        max-width: 25%;
+    }
+    .col.md-4 {
+        flex-basis: 33.333%;
+        max-width: 33.333%;
+    }
+    .col.md-5 {
+        flex-basis: 41.666%;
+        max-width: 41.666%;
+    }
+    .col.md-6 {
+        flex-basis: 50%;
+        max-width: 50%;
+    }
+    .col.md-7 {
+        flex-basis: 58.333%;
+        max-width: 58.333%;
+    }
+    .col.md-8 {
+        flex-basis: 66.666%;
+        max-width: 66.666%;
+    }
+    .col.md-9 {
+        flex-basis: 75%;
+        max-width: 75%;
+    }
+    .col.md-10 {
+        flex-basis: 83.333%;
+        max-width: 83.333%;
+    }
+    .col.md-11 {
+        flex-basis: 91.666%;
+        max-width: 91.666%;
+    }
+    .col.md-12 {
+        flex-basis: 100%;
+        max-width: 100%;
+    }
+}
+@media screen and (max-width: 64rem) {
+    .col.lg-1 {
+        flex-basis: 8.333%;
+        max-width: 8.333%;
+    }
+    .col.lg-2 {
+        flex-basis: 16.666%;
+        max-width: 16.666%;
+    }
+    .col.lg-3 {
+        flex-basis: 25%;
+        max-width: 25%;
+    }
+    .col.lg-4 {
+        flex-basis: 33.333%;
+        max-width: 33.333%;
+    }
+    .col.lg-5 {
+        flex-basis: 41.666%;
+        max-width: 41.666%;
+    }
+    .col.lg-6 {
+        flex-basis: 50%;
+        max-width: 50%;
+    }
+    .col.lg-7 {
+        flex-basis: 58.333%;
+        max-width: 58.333%;
+    }
+    .col.lg-8 {
+        flex-basis: 66.666%;
+        max-width: 66.666%;
+    }
+    .col.lg-9 {
+        flex-basis: 75%;
+        max-width: 75%;
+    }
+    .col.lg-10 {
+        flex-basis: 83.333%;
+        max-width: 83.333%;
+    }
+    .col.lg-11 {
+        flex-basis: 91.666%;
+        max-width: 91.666%;
+    }
+    .col.lg-12 {
+        flex-basis: 100%;
+        max-width: 100%;
+    }
+}
+
+
+
+/*  */
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5,
+.dark h6,
+.dark p,
+.dark span,
+.dark i {
+    color: #f1f1f1;
+}
+
+.mb-half {
+    margin-bottom: 0.5rem;
+}
+.mb-1 {
+    margin-bottom: 1rem;
+}
+.mb-2 {
+    margin-bottom: 2rem;
+}
 .mx-auto {
     margin: 0 auto;
 }
-
-/*  */
-button {
+.round {
+    border-radius: 7px;
+}
+.button {
+    text-align: center;
     padding: 0 15px;
     display: inline-block;
     line-height: 3.2;
-    background-color: #89CFF0;
+    border: 1px solid transparent;
 }
-input[type='submit'].button {
-    background-color: #89CFF0;
-    color: #fff;
+.button.expand {
+    display: block;
+    width: 100%;
+}
+.button.outline {
+    background: transparent;
+}
+.button img {
+    max-width: 2rem;
+    margin: 0 7px;
+    vertical-align: middle;
+}
+.button.gray {
+    color: #999;
+    border-color: #999;
 }
 
+.text-center {
+    text-align: center;
+}
+.text-left {
+    text-align: left;
+}
+.text-right {
+    text-align: right;
+}
+.is-small {
+    font-size: 0.8rem;
+}
+.color-gray {
+    color: #999
+}
+.justify-between {
+    justify-content: space-between;
+}
+.link {
+    color: #104E8B;
+    font-weight: bold;
+}
 
-/*  */
+@media screen and (max-width: 30rem) {
+    .hide-on-small {
+        display: none;
+    }
+}
+/* form */
+
+.input-group {
+    margin-bottom: 15px;
+}
+.input-group.float-label {
+    position: relative;
+    border: 1px solid aqua;
+}
+.input-group.float-label label,
+.input-group.float-label i {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    transition: 0.35s;
+}
+.input-group.float-label label  {
+    left: 15px;
+    right: unset;
+    display: inline-block;
+    padding: 5px;
+    background-color: #fff;
+
+}
+.input-group.float-label {
+    width: 100%;
+}
+.input-group.float-label  input:focus ~ label,
+.input-group.float-label  input:valid ~ label 		{
+    top: 0;
+    font-size:14px;
+    color: #009688;
+}
+.input-group  input:valid ~ i {
+    color: #009688 ;
+}
+/* login-form */
 .login-form {
+    min-height: 100vh;
+    margin-top: 30px;
+    margin-bottom: 30px;
     display: flex;
     align-items: center;
-    max-width: 500px;
-    min-height: 100vh;
-    
 }
-.login-form form {
+.login-form__inner {
+    width: 100%;
+    border-radius: 30px;
+    background-color: #fff;
+    overflow: hidden;
+}
+.login-form__inner .left-form {
     display: flex;
     flex-direction: column;
-    width: 100%;
-    padding: 30px;
-    background-color: #fff;
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    justify-content: center;
+    height: 100%;
+    padding: 50px 30px;
+    background-color: #89CFF0;
+    
 }
-.login-form form input{
-    width: 100%;
-    margin-bottom: 15px;
-    padding: 0 15px;
+.login-form__inner .left-form__img {
+    margin-bottom: 30px;
+} 
+.login-form__inner .left-form__text {
+    max-width: 200px;
+} 
+.login-form__inner .right-form {
+    max-width: 400px;
+    padding: 90px 30px 30px 30px;
+}
+.login-form__inner .right-form > div {
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.login-form__inner .right-form__bottom {
+    margin-top: 150px;
+}
 
-    border: none;
-    outline: none;
-    line-height: 3.2;
-    background-color: #e1e1e1;
+.login-form .input-group {
+    position: relative;
 }
-form input:not([type='submit'])::placeholder {
-    color: #999;
+.login-form input[type="submit"]  {
+    color: #fff;
+    cursor: pointer;
+    background-color: #89CFF0;
 }
-
