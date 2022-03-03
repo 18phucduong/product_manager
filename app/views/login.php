@@ -60,10 +60,10 @@
                                                     <input type="submit" class="button expand round" name="login" value="LOGIN">
                                                 </div>
                                                 <div class="input-group">
-                                                    <a href="#" class="button expand round outline gray">
+                                                    <button  class="button expand round outline gray">
                                                         <img src="assets/images/google-icon.png" alt="">
-                                                       <span> Sign in with google</span>
-                                                    </a>
+                                                       Sign in with google
+                                                    </button>
                                                 </div>
                                             </form>
                                         </div>
