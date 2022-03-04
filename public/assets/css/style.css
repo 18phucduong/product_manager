@@ -287,9 +287,11 @@ input[type="checkbox"] {
     border-radius: 7px;
 }
 .button {
-    text-align: center;
+    
     padding: 0 15px;
     display: inline-block;
+    text-align: center;
+    font-size: 1rem;
     line-height: 3.2;
     border: 1px solid transparent;
 }
@@ -347,7 +349,7 @@ input[type="checkbox"] {
     position: relative;
     border: 1px solid aqua;
 }
-.input-group.float-label label,
+.input-group.float-label label:not(.error),
 .input-group.float-label i {
     position: absolute;
     top: 50%;
@@ -355,7 +357,7 @@ input[type="checkbox"] {
     transform: translateY(-50%);
     transition: 0.35s;
 }
-.input-group.float-label label  {
+.input-group.float-label label:not(.error)  {
     left: 15px;
     right: unset;
     display: inline-block;
@@ -366,8 +368,8 @@ input[type="checkbox"] {
 .input-group.float-label {
     width: 100%;
 }
-.input-group.float-label  input:focus ~ label,
-.input-group.float-label  input:valid ~ label 		{
+.input-group.float-label  input:focus ~ label:not(.error),
+.input-group.float-label  input:valid ~ label:not(.error) 		{
     top: 0;
     font-size:14px;
     color: #009688;
@@ -424,4 +426,12 @@ input[type="checkbox"] {
     color: #fff;
     cursor: pointer;
     background-color: #89CFF0;
+}
+/* login form validate */
+.login-form  .input-group  label.error {
+    position: absolute;
+    top: calc(100%);
+    left: 0;
+    font-size: 0.8rem;
+    color: red;
 }
