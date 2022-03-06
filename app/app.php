@@ -1,17 +1,41 @@
 <?php
 
-function testInput($data) {
-	$data = trim($data);
-	$data = stripslashes($data);
-	$data = htmlspecialchars($data);
-	return $data;
+function checkMaxLength($number, $value) {
+	if (is_numeric($number) ) {
+		if(strlen($value) > $number) {
+			return true;
+		}else {
+			return false;
+		}
+	}else {
+		die("validate check max length invalid");
+	}
+	
 }
-function valilatePostMethod($value, $type='clean') {
-	$data = array();
-	$data = isset($_POST[$value]) ? testInput($_POST[$value]) : '';
+function checkMinLength($number, $value) {
+	if (is_numeric($number) ) {
+		if(strlen($value) < $number) {
+			return true;
+		}else {
+			return false;
+		}
+	}else {
+		die("validate check max length invalid");
+	}
+}
+function checkRequire($string ='require' ,$status = false) {
+	if( $string !== 'require' || $status !== true) {
+		return false;
+	}else {
+		return true;
+	}
+}
+function checkEmail($string) {
+	return true;
 
-	if($type="email")
-	return $data;
+}
+function checkUrl($string) {
+	return true;
 }
  
 
