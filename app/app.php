@@ -3,9 +3,9 @@
 function checkMaxLength($number, $value) {
 	if (is_numeric($number) ) {
 		if(strlen($value) >= $number) {
-			return true;
-		}else {
 			return false;
+		}else {
+			return true;
 		}
 	}else {
 		die("validate check max length rule invalid");
