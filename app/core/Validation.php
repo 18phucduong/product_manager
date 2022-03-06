@@ -5,7 +5,7 @@ namespace app\core;
 
 class Validation {
 
-    public $validated = false;
+    public $validated = true;
     protected $data = array();
 
     protected $rules = [
@@ -36,14 +36,18 @@ class Validation {
 
         foreach($keys as $key ){
             $this->filterKeyInPostRequest($key);
+
+            $rules = $data[$key];
             $inputData = $this->cleanData($_POST[$key]);
-            
-            
-            $validated_data = $this->checkRules($key, $data[$key], $inputData);
+            $validated_data = $this->checkRules($key, $rules, $inputData);
+
+            if( $validated_data['status'] == false ) $this->validated = false;
 
             $this->data[$key]['value'] = $validated_data['value'];
             $this->data[$key]['status'] = $validated_data['status'];
             $this->data[$key]['message'] = $validated_data['message'];
+
+
 
         }
 
@@ -60,6 +64,7 @@ class Validation {
     }
 
     protected function checkRules($name, $rules = array(), $value = '' ) {
+
         if( !empty($rules) ) {
             $current_status = false;
             foreach( $rules as $ruleKey => $ruleValue ) {
