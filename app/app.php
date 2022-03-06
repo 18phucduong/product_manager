@@ -2,32 +2,33 @@
 
 function checkMaxLength($number, $value) {
 	if (is_numeric($number) ) {
-		if(strlen($value) > $number) {
+		if(strlen($value) >= $number) {
 			return true;
 		}else {
 			return false;
 		}
 	}else {
-		die("validate check max length invalid");
+		die("validate check max length rule invalid");
 	}
 	
 }
 function checkMinLength($number, $value) {
 	if (is_numeric($number) ) {
-		if(strlen($value) < $number) {
+		if(strlen($value) >= $number) {
 			return true;
 		}else {
 			return false;
 		}
 	}else {
-		die("validate check max length invalid");
+		die("validate check min length rule invalid");
 	}
 }
-function checkRequire($string ='require' ,$status = false) {
-	if( $string !== 'require' || $status !== true) {
-		return false;
-	}else {
+function checkRequire($rule_value = false ,$value = false) {
+	if( $rule_value == true && !empty($value)) {
 		return true;
+	}
+	else {
+		return false;
 	}
 }
 function checkEmail($string) {
@@ -52,6 +53,7 @@ function sql_value_formatting($value) {
 require "core/Router.php";
 require "core/Database.php";
 require "core/Model.php";
+require "core/Validation.php";
 require "models/User.php";
 require "controllers/HomeController.php";
 require "controllers/AuthController.php";
