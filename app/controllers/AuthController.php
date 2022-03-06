@@ -55,14 +55,7 @@ class AuthController {
       }
       else {
          echo "login success";
-         if(!empty($_POST["remember_pass"])) {
-            setcookie ("user_name",  $data['user_name'], time()+ (10 * 365 * 24 * 60 * 60));  
-            setcookie ("password",	$data['password'],	time()+ (10 * 365 * 24 * 60 * 60));
-         } else {
-            setcookie ("user_name",""); 
-            setcookie ("password","");
-         }
-         $_SESSION["user"] = $users[0]['user_name'];
+         $this->rememberAccount($user_name, $password);
       }
    }
 
@@ -74,6 +67,17 @@ class AuthController {
       $user_tabel = new User;
 
       return $user_tabel->get_data($sql)[0];
+   }
+
+   protected function rememberAccount($user_name, $password) {
+      if(!empty($_POST["remember_pass"])) {
+         setcookie ("user_name",  $user_name, time()+ (10 * 365 * 24 * 60 * 60));  
+         setcookie ("password",	$password,	time()+ (10 * 365 * 24 * 60 * 60));
+      } else {
+         setcookie ("user_name",""); 
+         setcookie ("password","");
+      }
+      $_SESSION["user"] = $user_name;
    }
    
 
