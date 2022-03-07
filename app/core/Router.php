@@ -1,7 +1,7 @@
 <?php
 
 
-namespace app;
+namespace app\core;
 
 class Router {
 	

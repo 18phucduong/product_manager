@@ -1,6 +1,7 @@
 <?php
 require "helpers/helpers.php";
 require "core/Router.php";
+require "core/Store.php";
 require "core/Database.php";
 require "core/Model.php";
 require "core/Validation.php";
@@ -8,15 +9,19 @@ require "models/User.php";
 require "controllers/HomeController.php";
 require "controllers/AuthController.php";
 
-$config = require_once "config/main.php";
-
-use app\Router;
+$configs = require_once "configs/main.php";
+use app\core\Router;
+use app\core\Store;
 
 class App {
 
 	private $router;
 
-	public function __construct() {
+	public function __construct($configs) {
+
+		$store = Store::store();
+		$store->configs = $configs;
+
 		$this->router = new Router;
 
 		$this->router->get('/home', 'HomeController@index');
@@ -43,3 +48,4 @@ class App {
 	}
 
 }
+$app = new App($configs);
