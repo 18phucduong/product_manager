@@ -3,33 +3,36 @@ namespace app\core;
 
 class Database {
 
-	protected $host_name = '';
-	protected $username = '';
-	protected $pass = '';
-	protected $db_name = '';
+	private $_host_name = 'localhost';
+	private $_username = 'root';
+	private $_pass = '';
+	private $_db_name = 'manager_product';
 
-	protected $connect;
+	private $_connect;
+	private static $_instance;
 
+	public static function getInstance() {
+		if(!self::$_instance) { // If no instance then make one
+			self::$_instance = new self();
+		}
+		return self::$_instance;
+	}
 
 	public function __construct() {
-
-		$this->host_name = 'localhost';
-		$this->username = 'root';
-		$this->password = '';
-		$this->db_name = 'manager_product';
+		$this->connect(); 
 	}
 
 	public function connect() {
 		if (!$this->connect){
-			$this->connect =  new \mysqli( $this->host_name, $this->username, $this->password, $this->db_name );
-			if ($this->connect->connect_errno) {
-				return "Failed to connect to MySQL:" . $this->connect->connect_error ;
+			$this->_connect =  new \mysqli( $this->host_name, $this->username, $this->password, $this->db_name );
+			if ($this->_connect->connect_errno) {
+				trigger_error("Failed to conencto to MySQL: " . $this->connect->connect_error, E_USER_ERROR);
 			} 
 		}	
 	}
 
-	public function dis_connect() {
-		$this->connect->close();
+	public function disConnect() {
+		$this->_connect->close();
 	}
 
 	public function query($sql) {
@@ -43,6 +46,9 @@ class Database {
             return "Error: " . $sql . "<br>" . $this->connect->error;
 		}
         
+	}
+	public function getConnection() {
+		return $this->_connection;
 	}
 
   
