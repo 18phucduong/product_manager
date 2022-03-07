@@ -9,5 +9,5 @@ return [
 		'password' => '',
 		'db_name' => 'manager_product'
 	],
-	'layout' => 'admin_master'
+	'layout' => 'admin-master'
 ];

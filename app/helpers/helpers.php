@@ -30,3 +30,44 @@ function sql_value_formatting($value) {
             return $value;
     }
 }
+
+function viewPage($path, array $data, string $masterLayout =''){
+	$defaultMasterLayout = getMasterLayout();
+
+	$layout_path = empty($masterLayout) ? getLayoutPath( $defaultMasterLayout ) : getLayoutPath( $masterLayout );
+
+	$path;
+	extract($data);
+
+	if( file_exists($layout_path) ) {
+		require  $layout_path;
+	}else {
+		die("not found layout path");
+	}
+}
+function getLayoutPath(string $layout) {
+	return appRootDir().'\\views\\layout\\'. $layout .'.php';
+}
+function view($path, $data) {
+
+	$data;
+	
+	$requirePath = appRootDir() .'\\views\\' . $path . '.php';
+	if( file_exists($requirePath) ) {
+		require  $requirePath;
+	}else {
+		return $requirePath." not found";
+	}
+}
+function appRootDir() {
+	$store = app\core\Store::store();
+	return  $store->configs['app_root_dir'];
+}
+function publicRootDir() {
+	$store = app\core\Store::store();
+	return  $store->configs['public_root_dir'];
+}
+function getMasterLayout() {
+	$store = app\core\Store::store();
+	return  $store->configs['layout'];
+}

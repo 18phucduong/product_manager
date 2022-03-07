@@ -2,7 +2,6 @@
 namespace app\controllers;
 
 use app\models\User;
-use app\core\Validate;
 use app\core\Validation;
 
 function test_input($data) {
@@ -15,7 +14,10 @@ function test_input($data) {
 class AuthController {
 
    public function login_view() {
-      require dirname(dirname(__FILE__)) . '\views\login.php';
+      $data['page'] = [
+         'title' => ' Login Page'
+      ];
+      viewPage("auth\login", $data, 'no-header-footer');
    }
 
    public function login() {
