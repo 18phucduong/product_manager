@@ -9,11 +9,10 @@
             </div>
         </div>
     </div>
-    <div id="main-sidebar" class="container">
-        <p>Navigation</p>
+    <div id="main-sidebar">
         <?php require dirname(__DIR__)."/partials/main-sidebar.php"?>
     </div>
-    <div id="light-dark" class="container">
+    <div id="light-dark">
         <div class="light-dark-group">
             <span class="light-button button active"><i class="fa fa-certificate" aria-hidden="true"></i> Light</span>
             <span class="dark-button button "><i class="fa fa-moon-o" aria-hidden="true"></i> Dark</span>

@@ -480,7 +480,7 @@ Master Layout
 }
 /* Logo */
 #header-logo-wrap {
-    padding-top: 15px;
+    padding: 15px 30px;
     padding-bottom: 15px;
     background-color: #f9f9f9;
     border-bottom: 2px solid #eee;
@@ -491,9 +491,24 @@ Master Layout
     align-items: center;
     font-size: 1.5rem;
 }
+/* Sidebar */
+#main-sidebar {
+    padding: 15px;
+}
+#main-sidebar .nav .nav-item a,
+#main-sidebar .nav .nav-item span {
+    display: inline-block;
+    width: 100%;
+    padding: 5px 15px;
+    border-radius: 10px;
+}
+#main-sidebar .nav .nav-item a:hover,
+#main-sidebar .nav .nav-item.active a  {
+    background-color: #ccc;
+}
 /* Light dark button */
 #light-dark {
-    padding: 15px;
+    padding: 15px 30px;
     background-color: #f9f9f9;
     border-top: 1px solid #eee;
 }
