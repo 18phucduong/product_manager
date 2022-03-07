@@ -1,12 +1,14 @@
 <?php
 namespace app\core;
 
+use app\core\Store;
+
 class Database {
 
-	private $_host_name = 'localhost';
-	private $_username = 'root';
-	private $_pass = '';
-	private $_db_name = 'manager_product';
+	private $_host_name = '';
+	private $_username = '';
+	private $_password = '';
+	private $_db_name = '';
 
 	private $_connect;
 	private static $_instance;
@@ -19,12 +21,20 @@ class Database {
 	}
 
 	public function __construct() {
+		$store = Store::store();
+		$db_config = $store;
+
+		$this->_host_name = $db_config['host_name'];
+		$this->_username = $db_config['username'];
+		$this->_password = $db_config['password'];
+		$this->_db_name = $db_config['db_name'];
+
 		$this->connect(); 
 	}
 
 	public function connect() {
 		if (!$this->connect){
-			$this->_connect =  new \mysqli( $this->host_name, $this->username, $this->password, $this->db_name );
+			$this->_connect =  new \mysqli( $this->_host_name, $this->_username, $this->_password, $this->_db_name );
 			if ($this->_connect->connect_errno) {
 				trigger_error("Failed to conencto to MySQL: " . $this->connect->connect_error, E_USER_ERROR);
 			} 
@@ -36,20 +46,12 @@ class Database {
 	}
 
 	public function query($sql) {
-
 		$this->connect();
-
 		$result = $this->connect->query($sql);
-		if ($result->num_rows > 0) {
-		  return $result;
-		} else {
-            return "Error: " . $sql . "<br>" . $this->connect->error;
-		}
-        
+		
+		return $result->num_rows > 0 ? $result : ("Error: " . $sql . "<br>" . $this->connect->error);
 	}
 	public function getConnection() {
 		return $this->_connect;
 	}
-
-  
 }
