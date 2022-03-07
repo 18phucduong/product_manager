@@ -19,12 +19,9 @@ class Validation {
         'success' => 'This filed is valid',
         'error' => 'This field is invalid'
     ];
-
-
     public function __construct( $data ) {
         $this->inputData = $data;
     }
-
 	protected function cleanData($data) {
         $data = trim($data);
         $data = stripslashes($data);
@@ -46,9 +43,6 @@ class Validation {
             $this->data[$key]['value'] = $validated_data['value'];
             $this->data[$key]['status'] = $validated_data['status'];
             $this->data[$key]['message'] = $validated_data['message'];
-
-
-
         }
 
         return $this->data;
@@ -62,7 +56,6 @@ class Validation {
             }
         }
     }
-
     protected function checkRules($name, $rules = array(), $value = '' ) {
 
         if( !empty($rules) ) {
