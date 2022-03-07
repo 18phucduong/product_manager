@@ -91,5 +91,9 @@ CREATE TABLE `product_tag` (
   FOREIGN KEY (`product_id`) REFERENCES `product`(`id`),
   FOREIGN KEY (`tag_id`) REFERENCES `tag`(`id`),
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+<<<<<<< HEAD
 -- --------------------------------------------------------
 >>>>>>> anh xem giup em voi
+=======
+-- ---------------------------------------------------
+>>>>>>> PRO #6441: create_database
