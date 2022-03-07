@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js" type="text/javascript"></script>
+    <script  src="assets/js/validation/login.js" type="text/javascript"></script>
     <title>Login</title>
 </head>
 <body>
@@ -34,21 +37,21 @@
                                             <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration i</p>
                                         </div>
                                         <div class="right-form__main mb-2">
-                                            <form action="" method="post">
+                                            <form action="/product_manager/public/login" method="post" name="login-form" id="login-form">
                                                 <div class="input-group round float-label">
-                                                    <input type="text" name="user_name" id="user_name" required >
+                                                    <input type="text" name="user_name" id="user_name" value="<?php if(isset($_COOKIE["user_name"])) { echo $_COOKIE["user_name"]; } ?>" required >
                                                     <label for="user_name">Username</label>
                                                     <i class="fa-solid fa-at"></i>
                                                 </div>
                                                 <div class="input-group round float-label">
-                                                    <input type="password" name="password" id="password" required >
+                                                    <input type="password" name="password" id="password" value="<?php if(isset($_COOKIE["password"])) { echo $_COOKIE["password"]; } ?>" required >
                                                     <label for="password">Password</label>
                                                     <i class="fa-solid fa-key"></i>
                                                 </div>
                                                 <div class="row row-collapse mb-2">
                                                     <div class="col col-6">
                                                         <div class="input-group">
-                                                            <input type="checkbox" name="remember_pass" id="remember_pass">
+                                                            <input type="checkbox" name="remember_pass" id="remember_pass" checked>
                                                             <label for="remember_pass" class="is-small color-gray">Remember password</label>
                                                         </div>
                                                     </div>

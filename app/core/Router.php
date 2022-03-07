@@ -1,7 +1,7 @@
 <?php
 
 
-namespace app;
+namespace app\core;
 
 class Router {
 	
@@ -43,18 +43,44 @@ class Router {
 		$routes = $this->routers;
 
 		foreach( $routes as $route) {
+
+
 			list( $method, $url, $action ) = $route;
+			$is_route = false;
 			if( strpos( $request_method, $method) === FALSE ) 	continue;
-			if( strcmp( strtolower( $request_url ),  strtolower( $url ) ) === 0 ){
-				if( is_callable( $action ) ) {				
-					$action();
-				}
+
+			if( strpos( $url, '{' ) === false ) {
+		    	if( strcmp( strtolower( $request_url ),  strtolower( $url ) ) === 0 ){
+		    		$is_route = true;
+		    	}else {
+		    		continue;
+		    	}
+			}
+
+			if( $is_route == true ) {
+				$params = [];
+				$this->call_method( $action, $params);
 				return;
-			}else {
-				continue;
 			}
 		}
 
+	}
+	private function call_method( $action, $params ) {
+
+		if( is_callable( $action ) ) {				
+			call_user_func_array($action, $params);
+		}elseif( is_string( $action ) ) {
+			$class_name = explode( '@', $action )[0];
+			$method_name = explode( '@', $action )[1];
+			
+			$class_name_in_name_space = 'app\\controllers\\'. $class_name;
+
+			if( class_exists($class_name_in_name_space) ) {
+				if( method_exists( $class_name_in_name_space, $method_name ) ) {
+					call_user_func_array(array( new $class_name_in_name_space, $method_name ), $params);
+				}
+			}
+		}
 	}
 
 	public function run() {
