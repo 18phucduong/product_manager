@@ -20,7 +20,7 @@ class AuthController {
 
    public function login() {
 
-      if(empty($_POST['login'])) return;
+      if(empty($_POST['login'])) { return; }
       // Validate
       $validate = new Validation($_POST);
       $data = $validate->validate([
@@ -36,23 +36,13 @@ class AuthController {
       ]);
 
       if(  $validate->validated == false ) {
-         echo "validated false";
-         require dirname(dirname(__FILE__)) . '\views\login.php';
-         return;
+         $this->validateFail($data);
       }
       // Check user in database
-      $user = $this->check_user($data['user_name']['value'],$data['password']['value']);
+      $user = $this->checkUser($data['user_name']['value'],$data['password']['value']);
       
-
-      if( !gettype($user) == 'array') {
-         
-         $data['user_name']['status'] = false;
-         $data['user_name']['message'] = 'Username or Password is incorrect';
-         $data['password']['status'] = false;
-         $data['password']['message'] = 'Username or Password is incorrect';
-
-         require dirname(dirname(__FILE__)) . '\views\login.php';
-         return;
+      if( !gettype($user) == 'array') {       
+         $this->accountVerificationFailed($data,'user_name','password');
       }
       else {
          // remember account
@@ -61,14 +51,14 @@ class AuthController {
       }
    }
 
-   protected function check_user($user_name, $password){
+   protected function checkUser($user_name, $password){
       $user_name = sql_value_formatting( $user_name );
       $password = sql_value_formatting( md5($password) );
 
       $sql="select * from users where user_name=". $user_name . 'and password='.  $password;
       $user_tabel = new User;
 
-      return $user_tabel->get_data($sql)[0];
+      return $user_tabel->getData($sql)[0];
    }
 
    protected function rememberAccount($user_name, $password) {
@@ -81,7 +71,18 @@ class AuthController {
       }
       $_SESSION["user"] = $user_name;
    }
-   
 
+   protected function validateFail($data) {
+      echo "validated false";
+      require dirname(dirname(__FILE__)) . '\views\login.php';
+      return;
+   }
+
+   protected function accountVerificationFailed($data, $id_name, $pass_name) {
+      $data[$id_name]['status'] = $data[$pass_name]['status'] = false;
+      $data[$id_name]['message'] = $data[$pass_name]['message'] = 'Username or Password is incorrect';
+
+      $this->validateFail($data);
+   }
 
 }
