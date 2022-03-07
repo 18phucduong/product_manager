@@ -1,3 +1,1 @@
-<pre>
-    <?php print_r($data)?>
-</pre>
+<h1>Dashboarth here</h1>
