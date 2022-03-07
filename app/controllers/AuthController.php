@@ -20,11 +20,9 @@ class AuthController {
 
    public function login() {
 
-
       if(empty($_POST['login'])) return;
-         // Lấy dữ liệu
+      // Validate
       $validate = new Validation($_POST);
-      
       $data = $validate->validate([
          'user_name' => [
             'require' => true,
@@ -33,29 +31,33 @@ class AuthController {
          'password' => [
             'require' => true,
             'min' => 8,
-            'max' => 50,
+            'max' => 50
          ]
-         ]);
+      ]);
 
       if(  $validate->validated == false ) {
+         echo "validated false";
          require dirname(dirname(__FILE__)) . '\views\login.php';
          return;
       }
-
-      $user = $this->check_user($user_name, $password);
+      // Check user in database
+      $user = $this->check_user($data['user_name']['value'],$data['password']['value']);
+      
 
       if( !gettype($user) == 'array') {
+         
          $data['user_name']['status'] = false;
          $data['user_name']['message'] = 'Username or Password is incorrect';
          $data['password']['status'] = false;
          $data['password']['message'] = 'Username or Password is incorrect';
-         require dirname(dirname(__FILE__)) . '\views\login.php';
 
+         require dirname(dirname(__FILE__)) . '\views\login.php';
          return;
       }
       else {
+         // remember account
          echo "login success";
-         $this->rememberAccount($user_name, $password);
+         $this->rememberAccount($data['user_name']['value'], $data['password']['value']);
       }
    }
 
