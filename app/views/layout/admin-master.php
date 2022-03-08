@@ -12,7 +12,7 @@
     <div class="wrapper">
         <div>
             <div class="row row-collapse">
-                <div id="admin-menu" class="col max-w-350">
+                <div id="admin-menu" class="col max-w-350 full-height min-h-100">
                     <?php require dirname(__DIR__)."/blocks/main-sidebar.php"?>
                 </div>
                 <div id="admin-content" class="col">
