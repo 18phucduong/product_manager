@@ -9,5 +9,32 @@ return [
 		'password' => '',
 		'db_name' => 'manager_product'
 	],
-	'layout' => 'admin-master'
+	'layout' => 'admin-master',
+	'main_sidebar_menu' => [
+		[
+			'icon' => null,
+			'text' => 'Navigation',
+			'link' => null
+		],
+		[
+			'icon' => 'th-large',
+			'text' => 'Dashboarth',
+			'link' => '#'
+		],
+		[
+			'icon' => 'university',
+			'text' => 'Bank',
+			'link' => '#'
+		],
+		[
+			'icon' => 'bars',
+			'text' => 'report',
+			'link' =>  '#'
+		],
+		[
+			'icon' => 'cogs',
+			'text' => 'Setting',
+			'link' => '#'
+		]
+	]
 ];

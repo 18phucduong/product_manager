@@ -505,6 +505,7 @@ Master Layout
 #main-sidebar .nav .nav-item a:hover,
 #main-sidebar .nav .nav-item.active a  {
     background-color: #ccc;
+    cursor: pointer;
 }
 /* Light dark button */
 #light-dark {

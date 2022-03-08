@@ -32,7 +32,7 @@ function sql_value_formatting($value) {
 }
 
 function viewPage($path, array $data, string $masterLayout =''){
-	$defaultMasterLayout = getMasterLayout();
+	$defaultMasterLayout = getConfigs()['layout'];
 
 	$layout_path = empty($masterLayout) ? getLayoutPath( $defaultMasterLayout ) : getLayoutPath( $masterLayout );
 
@@ -46,28 +46,39 @@ function viewPage($path, array $data, string $masterLayout =''){
 	}
 }
 function getLayoutPath(string $layout) {
-	return appRootDir().'\\views\\layout\\'. $layout .'.php';
+	return getConfigs()['app_root_dir'] .'\\views\\layout\\'. $layout .'.php';
 }
 function view($path, $data) {
 
 	$data;
 	
-	$requirePath = appRootDir() .'\\views\\' . $path . '.php';
+	$requirePath = getConfigs()['app_root_dir'] .'\\views\\' . $path . '.php';
 	if( file_exists($requirePath) ) {
 		require  $requirePath;
 	}else {
 		return $requirePath." not found";
 	}
 }
-function appRootDir() {
+function getConfigs() {
 	$store = app\core\Store::store();
-	return  $store->configs['app_root_dir'];
+	return  $store->configs;
 }
-function publicRootDir() {
-	$store = app\core\Store::store();
-	return  $store->configs['public_root_dir'];
-}
-function getMasterLayout() {
-	$store = app\core\Store::store();
-	return  $store->configs['layout'];
+function getSidebarCol(array $items, string $class) {
+
+	echo "<nav class='nav nav-col $class'><ul>";	
+	foreach( $items  as $item) {
+		$text = $item['text'];
+		$link = $item['link'];
+		$icon = $item['icon'];
+		$link_text = is_null($link) ? "href='$link'" : '';
+		$icon_tag = !is_null($icon) ? "<i class='fa fa-$icon' aria-hidden='true'></i>" : '';
+
+		if($item['link'] == null) {
+			echo  "<li class='nav-item '><span $link_text>$icon_tag $text</span></li>";
+		}else{
+			echo "<li class='nav-item '><a $link_text>$icon_tag $text</a></li>";
+		}
+	}
+	echo "</ul></nav>";
+	
 }
