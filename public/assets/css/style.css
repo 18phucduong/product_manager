@@ -344,6 +344,9 @@ input[type="checkbox"] {
     color: #104E8B;
     font-weight: bold;
 }
+.max-w-350 {
+    max-width: 350px;
+}
 .max-w-400 {
     max-width: 400px;
 }

@@ -18,7 +18,7 @@ return [
 		],
 		[
 			'icon' => 'th-large',
-			'text' => 'Dashboarth',
+			'text' => 'Dashboard',
 			'link' => '#'
 		],
 		[
