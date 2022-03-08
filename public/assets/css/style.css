@@ -41,6 +41,10 @@ input[type="checkbox"] {
     margin: 0 auto;
     padding: 0 15px;
 }
+.container-fluid {
+    width: 100%;
+    padding: 0 15px;
+}
 .row {
     display: flex;
     flex-wrap: wrap;
@@ -55,6 +59,7 @@ input[type="checkbox"] {
     padding-right: 0;
 }
 .col {
+    flex-grow: 1;
     padding: 0 15px;
 }
 .col-1 {
@@ -287,11 +292,9 @@ input[type="checkbox"] {
     border-radius: 7px;
 }
 .button {
-    
+    text-align: center;
     padding: 0 15px;
     display: inline-block;
-    text-align: center;
-    font-size: 1rem;
     line-height: 3.2;
     border: 1px solid transparent;
 }
@@ -330,18 +333,59 @@ input[type="checkbox"] {
 .justify-between {
     justify-content: space-between;
 }
+.f-grow-0 {
+ flex-grow: 0;
+}
+.f-grow-1 {
+ flex-grow: 1;
+}
+
 .link {
     color: #104E8B;
     font-weight: bold;
 }
-
+.max-w-350 {
+    max-width: 350px;
+}
+.max-w-400 {
+    max-width: 400px;
+}
+.is-xlarge {
+    font-size: 2rem;
+}
+.min-h-100 {
+    min-height: 100vh;
+}
+.full-height {
+    height: 100%;
+}
 @media screen and (max-width: 30rem) {
     .hide-on-small {
         display: none;
     }
 }
-/* form */
+/* nav */
+.nav ul,
+.nav ul li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
 
+.nav .nav-item i {
+    display: inline-block;
+    margin-right: 15px;
+}
+.nav .nav-item a {
+    color: #333;
+    font-size: 1.2rem;
+    text-decoration: none;
+    line-height: 1.6;
+}
+.nav-col .nav-item {
+    margin-bottom: 7px;
+}
+/* form */
 .input-group {
     margin-bottom: 15px;
 }
@@ -349,7 +393,7 @@ input[type="checkbox"] {
     position: relative;
     border: 1px solid aqua;
 }
-.input-group.float-label label:not(.error),
+.input-group.float-label label,
 .input-group.float-label i {
     position: absolute;
     top: 50%;
@@ -357,7 +401,7 @@ input[type="checkbox"] {
     transform: translateY(-50%);
     transition: 0.35s;
 }
-.input-group.float-label label:not(.error)  {
+.input-group.float-label label  {
     left: 15px;
     right: unset;
     display: inline-block;
@@ -368,8 +412,8 @@ input[type="checkbox"] {
 .input-group.float-label {
     width: 100%;
 }
-.input-group.float-label  input:focus ~ label:not(.error),
-.input-group.float-label  input:valid ~ label:not(.error) 		{
+.input-group.float-label  input:focus ~ label,
+.input-group.float-label  input:valid ~ label 		{
     top: 0;
     font-size:14px;
     color: #009688;
@@ -427,11 +471,73 @@ input[type="checkbox"] {
     cursor: pointer;
     background-color: #89CFF0;
 }
-/* login form validate */
-.login-form  .input-group  label.error {
-    position: absolute;
-    top: calc(100%);
+/* 
+Master Layout
+*/
+.wrapper {
+    min-height: 100vh;
+    background-color: #eee;
+}
+/* Main sidebar */
+.main-sidebar-wrap {
+    height: 100%;
+    background-color: #fff;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    overflow: hidden;
+}
+/* Logo */
+#header-logo-wrap {
+    position: relative;
+    padding: 15px 20px;
+    padding-bottom: 15px;
+    background-color: #f9f9f9;
+    border-bottom: 2px solid #eee;
+}
+#header-logo-wrap .logo-button {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    font-size: 1.5rem;
+}
+/* Sidebar */
+
+#main-sidebar .nav .nav-item a,
+#main-sidebar .nav .nav-item span {
+    display: inline-block;
+    width: 100%;
+    padding: 5px 20px;
+}
+#main-sidebar .nav .nav-item a:hover,
+#main-sidebar .nav .nav-item.active a  {
+    background-color: #ccc;
+    cursor: pointer;
+}
+/* Light dark button */
+#light-dark {
+    position: fixed;
     left: 0;
-    font-size: 0.8rem;
-    color: red;
+    bottom: 0;
+    width: 100%;
+    padding: 15px 20px;
+    background-color: #f9f9f9;
+    border-top: 1px solid #eee;
+}
+.light-dark-group {
+    display: flex;
+    column-gap: 5px;
+    padding: 5px;
+    background-color: #eee;
+    border-radius: 10px;
+}
+.light-dark-group .button {
+    flex-grow: 1;
+    border-radius: inherit;
+    text-align: center;
+    cursor: pointer;
+}
+.light-dark-group .button i {
+    margin-right: 7px;
+}
+.light-dark-group .button.active {
+    background-color: #fff;
 }
