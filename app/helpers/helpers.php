@@ -18,7 +18,7 @@ function checkRequire($rule_value = false ,$value = false) {
 	return ( $rule_value == true && !empty($value) ) ? true : false;
 }
 // input value in SQL
-function sql_value_formatting($value) {
+function sqlValueFormatting($value) {
     switch (gettype($value)) {
         case "string":
             return "'". $value . "'";
@@ -51,7 +51,7 @@ function viewPage($path, array $data, string $masterLayout =''){
 function getLayoutPath(string $layout) {
 	return getConfigs()['app_root_dir'] .'\\views\\layout\\'. $layout .'.php';
 }
-function view($path, $data) {
+function view($path, $data = null) {
 
 	$data;
 	
@@ -87,5 +87,18 @@ function getSidebarCol(array $items, string $class) {
 		}
 	}
 	echo "</ul></nav>";
-	
+}
+// toSlug
+function toSlug($str) {
+    $str = trim(mb_strtolower($str));
+    $str = preg_replace('/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/', 'a', $str);
+    $str = preg_replace('/(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)/', 'e', $str);
+    $str = preg_replace('/(ì|í|ị|ỉ|ĩ)/', 'i', $str);
+    $str = preg_replace('/(ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ)/', 'o', $str);
+    $str = preg_replace('/(ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ)/', 'u', $str);
+    $str = preg_replace('/(ỳ|ý|ỵ|ỷ|ỹ)/', 'y', $str);
+    $str = preg_replace('/(đ)/', 'd', $str);
+    $str = preg_replace('/[^a-z0-9-\s]/', '', $str);
+    $str = preg_replace('/([\s]+)/', '-', $str);
+    return $str;
 }

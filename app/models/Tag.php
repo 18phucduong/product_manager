@@ -9,8 +9,9 @@ class Tag extends Model {
     public function __construct()
     {
         parent::__construct();
-        $this->table_name = 'tags';
-    }    
+        $this->table = 'tags';
+    }
+    
 
 }
 

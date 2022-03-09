@@ -7,14 +7,13 @@ use app\core\Database;
 
 class Model extends Database {
 
-    protected $table_name;
+    protected $table;
     
     public function __construct() {
         parent::__construct();
     }
     
     public function getData($sql) {
-
         $db = Database::getInstance();
         $mysqli = $db->getConnection(); 
         $result = $mysqli->query($sql);
@@ -26,46 +25,51 @@ class Model extends Database {
             }
             return $data;
         }else {
-            echo "0 results";
+            return "0 results";
         }   
     }
 
     public function insert($data) {
-        $table_cols = array_keys($data);
-        $table_cols_value = array_values($data);
-        $table_cols_text = '';
+        $tableCols = array_keys($data);
+        $tableColsValue = array_values($data);
+        $tableColsText = '';
 
-        for( $i=0; $i < count($table_cols); $i++ ) {
-            if($i < count($table_cols) -1 ) {
-                $table_cols_text .= $table_cols[$i] . ', ';
+        for( $i=0; $i < count($tableCols); $i++ ) {
+            if($i < count($tableCols) -1 ) {
+                $tableColsText .= $tableCols[$i] . ', ';
             }else{
-                $table_cols_text .= $table_cols[$i];
+                $tableColsText .= $tableCols[$i];
             }
         }
-        $table_cols_value_text = '';
-        for( $i=0; $i < count($table_cols_value); $i++ ) {
-            $value = sql_value_formatting($table_cols_value[$i]);
+        $tableColsValue_text = '';
+        for( $i=0; $i < count($tableColsValue); $i++ ) {
+            $value = sqlValueFormatting($tableColsValue[$i]);
 
-            $table_cols_value_text = ($i < count($table_cols_value) -1 ) ?  ( $value . ', ') : $value;
+            $tableColsValue_text .= ($i < count($tableColsValue) -1 ) ?  ( $value . ', ') : $value;
         }
-        $sql = "INSERT INTO $this->table_name ( $table_cols_text )
-        VALUES ( $table_cols_value_text )";
+        $sql = "INSERT INTO $this->table ( $tableColsText )
+        VALUES ( $tableColsValue_text )";
 
         $db = Database::getInstance();
-        $mysqli = $db->getConnection(); 
+        $mysqli = $db->getConnection();
         $mysqli->query($sql);
         $db->disConnect();
-
     }
-
+    public function hasColValue($colName, $value){
+        $sqlValue = sqlValueFormatting($value);
+        $sql = "SELECT * FROM $this->table WHERE $colName = $sqlValue";
+        return  gettype($this->getData($sql)) == 'array' ? true : false;
+    }
+    public function getAll() {
+        return $this->getData("SELECT * FROM $this->table");
+    }
     public function findId( $id, $id_col = 'id' ) {
-        $this->getData("SELECT * FROM $this->table_name WHERE $id_col=$id");
+        return $this->getData("SELECT * FROM $this->table WHERE $id_col=$id");
     }
 
     public function deleteId( $id, $id_col = 'id' ) {
-        $this->getData("DELETE FROM $this->table_name WHERE $id_col=$id");
+        return $this->getData("DELETE FROM $this->table WHERE $id_col=$id");
     }
 
 
 }
-

@@ -1,3 +1,7 @@
+<?php
+    if( isset($data['tag']) ) { $tag = $data['tag']; }
+    $tagList = $data['tagList'];
+?>
 <div id="main-content" class="container-fluid">
     <div class="row">
         <div class=" col col-4">
@@ -19,7 +23,6 @@
         </div>
         <div class="col col-8">
             <div class="right-side">
-                
                 <table class="table" style="width: 100%">
                     <thead>
                         <div><h2>Tags List</h2></div>
@@ -48,39 +51,47 @@
                         </div>
                     </thead>
                     <tbody>
-                    <tr>
-                        <th>
-                        Name
-                        </th>
-                        <th>
-                        slug
-                        </th>
-                        <th>
-                        Count
-                        </th>
-                        <th>
-                        Action
-                        </th>
-                    </tr>
-                    <tr>
-                        <td>
-                        Tag1
-                        </td>
-                        <td>
-                        tag1
-                        </td>
-                        <td>
-                        (3)
-                        </td>
-                        <td>
-                        <a href="#" class="button button-blue">Edit</a>
-                        <form action="#" method="delete">
-                            <input type="submit" class="button button-red" value="Delete">
-                        </form>
-                        </td>
-                    </tr>
+                        <tr>
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                slug
+                            </th>
+                            <th>
+                                Count
+                            </th>
+                            <th>
+                                Action
+                            </th>
+                        </tr>
+                        <?php
+                            foreach($tagList as $tag) {
+                                ?>
+                                    <tr>
+                                        <td>
+                                            <?php echo $tag['name'];?>
+                                        </td>
+                                        <td>
+                                            <?php echo $tag['slug'];?>
+                                        </td>
+                                        <td>
+                                            Chưa liên kết
+                                        </td>
+                                        <td class="row">
+                                            <a href="<?php echo getConfig('base_path')?>/tag/edit/<?php echo $tag['id']?>" class="col button button-blue">Edit</a>
+                                            <form class="col" action="<?php echo getConfig('base_path')?>/tag/delete/<?php echo $tag['id']?>" method="post">
+                                                <input type="hidden" class="button button-red" value="<?php echo $tag['id']?>">
+                                                <input type="submit" class="button button-red" value="Delete">
+                                            </form>
+                                        </td>
+                                    </tr>
+                                <?php
+                            }   
+                        ?>
+                  
                     </tbody>
-            </table>
+                </table>
             </div>
         </div>
     </div>

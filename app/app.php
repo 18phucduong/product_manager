@@ -33,8 +33,10 @@ class App {
 
 		$this->router->get('/tag/new', 'TagController@create');
 		$this->router->post('/tag/new', 'TagController@store');
-		$this->router->get('/tag/edit', 'TagController@edit');
-		$this->router->post('/tag/update', 'TagController@update');
+		$this->router->get('/tag/edit/{id}', 'TagController@edit');
+		$this->router->post('/tag/update/{id}', 'TagController@update');
+		$this->router->post('/tag/delete/{id}', 'TagController@delete');
+		$this->router->delete('/tag/destroy/{id}', 'TagController@destroy');
 		
 		$this->router->run();
 	}

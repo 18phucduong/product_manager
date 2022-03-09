@@ -54,13 +54,13 @@ class AuthController {
    }
 
    protected function checkUser($user_name, $password){
-      $user_name = sql_value_formatting( $user_name );
-      $password = sql_value_formatting( md5($password) );
+      $user_name = sqlValueFormatting( $user_name );
+      $password = sqlValueFormatting( md5($password) );
 
       $sql="select * from users where user_name=". $user_name . 'and password='.  $password;
-      $user_tabel = new User;
+      $user = new User;
 
-      return $user_tabel->getData($sql)[0];
+      return $user->getData($sql)[0];
    }
 
    protected function rememberAccount($user_name, $password) {

@@ -38,6 +38,7 @@ class Router {
 		$methodParams = [];
 		foreach( $routes as $route) {
 			list( $method, $url, $action ) = $route;
+			
 
 			if( $this->isInvalidMethod($method, $requestMethod) ) {continue;}
 			if( $this->hasNoOpenParamCharacter($url)) {
@@ -60,7 +61,7 @@ class Router {
 			$this->callMethod($action, $methodParams);
 			return;	
 		}
-		die("khong tim thay trang");
+		die("404 page not found");
 	}
 	private function callMethod( $action, $params = [] ) {
 		if( is_callable( $action ) ) {				
@@ -95,9 +96,8 @@ class Router {
 		return  $requestMethod !== $routeMethod ? true :false;
 	}
 	private function isNotValidCompareParams(array $routeParams,array $requestParams) {	
-		$continue = false;
 		// compare params count
-		$continue = count( $routeParams ) !==  count( $requestParams ) ? true : false;
+		if( count( $routeParams ) !==  count( $requestParams ) ) { return true;}
 		// compare params value
 		$paramPositions = [];
 		foreach($routeParams as $index => $param) {
@@ -109,9 +109,7 @@ class Router {
 			unset($routeParams[$position]);
 			unset($requestParams[$position]);
 		}
-		$continue = array_diff($routeParams, $requestParams ) != false ? true : false;
-		
-		return $continue;
+		return  array_diff($routeParams, $requestParams ) == false ? false : true;
 	}
 	public function run() {
 		$this->mapRouters();
