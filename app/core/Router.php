@@ -1,24 +1,18 @@
 <?php
-
-
 namespace app\core;
 
 class Router {
 	
 	public $routers = array();
 
-	public function __construct() {
-
-	}
-
-	private function get_request_url() {
-
+	private function getRequestUrl() {
+		$basePath = getConfigs()['base_path'];
 		$url = $_SERVER['REQUEST_URI'];
-		$url = str_replace('product_manager/public/', '', $url);
+		$url = str_replace($basePath, '', $url);
 		return $url;
 	}
 
-	private function get_request_method(){
+	private function getRequestMethod(){
 		$method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
 		return $method;
 	}
@@ -37,53 +31,89 @@ class Router {
 		$this->add_router('DELETE', $url, $action);
 	}
 
-	public function map_routers() {
-		$request_url = $this->get_request_url();
-		$request_method = $this->get_request_method();
+	public function mapRouters() {
+		$requestUrl = $this->getRequestUrl();
+		$requestMethod = $this->getRequestMethod();
 		$routes = $this->routers;
-
+		$methodParams = [];
 		foreach( $routes as $route) {
-
-
 			list( $method, $url, $action ) = $route;
-			$is_route = false;
-			if( strpos( $request_method, $method) === FALSE ) 	continue;
 
-			if( strpos( $url, '{' ) === false ) {
-		    	if( strcmp( strtolower( $request_url ),  strtolower( $url ) ) === 0 ){
-		    		$is_route = true;
-		    	}else {
-		    		continue;
+			if( $this->isInvalidMethod($method, $requestMethod) ) {continue;}
+			if( $this->hasNoOpenParamCharacter($url)) {
+		    	if( $this->isValidRequestUrl($url, $requestUrl) ){
+					$this->callMethod( $action, []);
+					return;
 		    	}
+		    	continue;
 			}
+			if ($this->hasNoCloseParamCharacter($url)) {continue;}
 
-			if( $is_route == true ) {
-				$params = [];
-				$this->call_method( $action, $params);
-				return;
+			$routeParams = array_filter(explode( '/', $url));
+			$requestParams = array_filter(explode( '/', $requestUrl));
+			
+			if($this->isNotValidCompareParams($routeParams, $requestParams)) {continue;}
+
+			foreach( $routeParams as $index => $param) {
+				if( preg_match('/^{\w+}$/', $param) ) { $methodParams[] = $requestParams[$index]; }
 			}
+			$this->callMethod($action, $methodParams);
+			return;	
 		}
-
+		die("khong tim thay trang");
 	}
-	private function call_method( $action, $params ) {
-
+	private function callMethod( $action, $params = [] ) {
 		if( is_callable( $action ) ) {				
 			call_user_func_array($action, $params);
-		}elseif( is_string( $action ) ) {
+			return;
+		}
+		if( is_string( $action ) ) {
 			$class_name = explode( '@', $action )[0];
 			$method_name = explode( '@', $action )[1];
-			
-			$class_name_in_name_space = 'app\\controllers\\'. $class_name;
+		
+			$class_name_in_name_space = 'app\\controllers\\'. $class_name;				
+			if( !class_exists($class_name_in_name_space) ) { die("not found this Controller"); }
 
-			if( class_exists($class_name_in_name_space) ) {
-				if( method_exists( $class_name_in_name_space, $method_name ) ) {
-					call_user_func_array(array( new $class_name_in_name_space, $method_name ), $params);
-				}
-			}
+			if( !method_exists( $class_name_in_name_space, $method_name ) ) { die("this method is not exists"); }
+			call_user_func_array([new $class_name_in_name_space, $method_name ], $params);
+		}else {
+			die("this action is not found");
 		}
 	}
-
+	private function hasNoOpenParamCharacter(string $url) {
+		return strpos( $url, '{' ) === false ? true : false; 
+	}
+	private function hasNoCloseParamCharacter(string $url) {
+		return strpos( $url, '}' ) === false ? true : false; 
+	}
+	private function isValidRequestUrl(string $url, string $requestUrl) {
+		$lowerUrl = strtolower( $url );
+		$lowerRequestUrl = strtolower( $requestUrl );
+		return strcmp( $lowerUrl,  $lowerRequestUrl ) === 0 ? true : false;
+	}
+	private function isInvalidMethod(string $routeMethod,string $requestMethod) {
+		return  $requestMethod !== $routeMethod ? true :false;
+	}
+	private function isNotValidCompareParams(array $routeParams,array $requestParams) {	
+		$continue = false;
+		// compare params count
+		$continue = count( $routeParams ) !==  count( $requestParams ) ? true : false;
+		// compare params value
+		$paramPositions = [];
+		foreach($routeParams as $index => $param) {
+			if(strpos($param, '{') !== false ) {
+				$paramPositions[] = $index;
+			}
+		}
+		foreach($paramPositions as $position) {
+			unset($routeParams[$position]);
+			unset($requestParams[$position]);
+		}
+		$continue = array_diff($routeParams, $requestParams ) != false ? true : false;
+		
+		return $continue;
+	}
 	public function run() {
-		$this->map_routers();
+		$this->mapRouters();
 	}
 }
