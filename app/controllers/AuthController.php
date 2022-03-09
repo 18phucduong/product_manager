@@ -1,8 +1,9 @@
 <?php
 namespace app\controllers;
 
+use app\core\Controller;
+use app\models\Authentication;
 use app\models\User;
-use app\core\Validation;
 
 function test_input($data) {
    $data = trim($data);
@@ -11,9 +12,15 @@ function test_input($data) {
    return $data;
  }
 
-class AuthController {
+class AuthController extends Controller {
 
    public function login_view() {
+
+      Authentication::auth()->check();
+      if( Authentication::auth()->isAuth ) {
+         return redirectRoute('home.index');
+      }
+      
       $data['page'] = [
          'title' => ' Login Page'
       ];
@@ -21,70 +28,40 @@ class AuthController {
    }
 
    public function login() {
-
-      if(empty($_POST['login'])) { return; }
+      $data['page'] = [
+         'title' => 'Login page'
+      ];
       // Validate
-      $validate = new Validation($_POST);
-      $data = $validate->validate([
-         'user_name' => [
-            'require' => true,
-            'min' => '6'
-         ],
-         'password' => [
-            'require' => true,
-            'min' => 8,
-            'max' => 50
-         ]
-      ]);
-
-      if(  $validate->validated == false ) {
-         $this->validateFail($data);
+      if(empty($_POST['login'])) { return; }
+      $user = new User;
+      $auth = Authentication::auth();     
+      $dataUser = $auth->checkUser($user->user_name, $user->password);
+      if( gettype($dataUser) == 'array' ) {     
+         $user->fillModelPropertiesData($dataUser);
+         print_r($auth);
+         // die();
+         $auth->rememberAccount($user->id);
+         redirect('http://localhost/product_manager/public/home'); 
       }
-      // Check user in database
-      $user = $this->checkUser($data['user_name']['value'],$data['password']['value']);
+
+      $user->setPropertyErrorMessage('user_name', 'Username or Password is incorrect');
+      $user->setPropertyErrorMessage('password', 'Username or Password is incorrect');
+      $this->isValidatedForm = false;
+
+      $data['dataView']['user'] = $user;
+      return viewPage('auth/login', $data,'no-header-footer');
+   }
+   public function logout() {
+      session_start();
       
-      if( !gettype($user) == 'array') {       
-         $this->accountVerificationFailed($data,'user_name','password');
-      }
-      else {
-         // remember account
-         echo "login success";
-         $this->rememberAccount($data['user_name']['value'], $data['password']['value']);
-      }
+      if (isset($_COOKIE['user'])) {
+         unset($_COOKIE['user']); 
+         setcookie('user', null, time() - 3600); 
+
+         print_r($_COOKIE['user']);
+         
+      } 
+      redirect('http://localhost/product_manager/public/login'); 
    }
-
-   protected function checkUser($user_name, $password){
-      $user_name = sql_value_formatting( $user_name );
-      $password = sql_value_formatting( md5($password) );
-
-      $sql="select * from users where user_name=". $user_name . 'and password='.  $password;
-      $user_tabel = new User;
-
-      return $user_tabel->getData($sql)[0];
-   }
-
-   protected function rememberAccount($user_name, $password) {
-      if(!empty($_POST["remember_pass"])) {
-         setcookie ("user_name",  $user_name, time()+ (10 * 365 * 24 * 60 * 60));  
-         setcookie ("password",	$password,	time()+ (10 * 365 * 24 * 60 * 60));
-      } else {
-         setcookie ("user_name",""); 
-         setcookie ("password","");
-      }
-      $_SESSION["user"] = $user_name;
-   }
-
-   protected function validateFail($data) {
-      echo "validated false";
-      require dirname(dirname(__FILE__)) . '\views\login.php';
-      return;
-   }
-
-   protected function accountVerificationFailed($data, $id_name, $pass_name) {
-      $data[$id_name]['status'] = $data[$pass_name]['status'] = false;
-      $data[$id_name]['message'] = $data[$pass_name]['message'] = 'Username or Password is incorrect';
-
-      $this->validateFail($data);
-   }
-
+      
 }

@@ -1,0 +1,136 @@
+
+/* 
+Master Layout
+*/
+.wrapper {
+    background-color: #eee;
+}
+/* Main sidebar */
+.main-sidebar-wrap {
+    height: 100%;
+    background-color: #fff;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    overflow: hidden;
+}
+/* Logo */
+#header-logo-wrap {
+    position: relative;
+    padding: 15px 20px;
+    padding-bottom: 15px;
+    background-color: #f9f9f9;
+    border-bottom: 2px solid #eee;
+}
+#header-logo-wrap .logo-button {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    font-size: 1.5rem;
+}
+/* Sidebar */
+
+#main-sidebar .nav .nav-item a,
+#main-sidebar .nav .nav-item span {
+    display: inline-block;
+    width: 100%;
+    padding: 5px 20px;
+}
+#main-sidebar .nav .nav-item a:hover,
+#main-sidebar .nav .nav-item.active a  {
+    background-color: #ccc;
+    cursor: pointer;
+}
+/* Light dark button */
+#light-dark {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 15px 20px;
+    background-color: #f9f9f9;
+    border-top: 1px solid #eee;
+}
+.light-dark-group {
+    display: flex;
+    column-gap: 5px;
+    padding: 5px;
+    background-color: #eee;
+    border-radius: 10px;
+}
+.light-dark-group .button {
+    flex-grow: 1;
+    border-radius: inherit;
+    text-align: center;
+    cursor: pointer;
+}
+.light-dark-group .button i {
+    margin-right: 7px;
+}
+.light-dark-group .button.active {
+    background-color: #fff;
+}
+
+
+/* Content-header */
+.content-header {
+    padding: 15px;
+}
+
+/*  */
+
+/* nav */
+.nav ul,
+.nav ul li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.nav .nav-item i {
+    display: inline-block;
+    margin-right: 15px;
+}
+.nav .nav-item a {
+    color: #333;
+    font-size: 1.2rem;
+    text-decoration: none;
+    line-height: 1.6;
+}
+.nav-col .nav-item {
+    margin-bottom: 7px;
+}
+.terms-box {
+    max-height: 250px;
+    overflow-y: auto;
+}
+/* form  */
+.input-title {
+    font-size: 1.2rem;
+}
+.input-group .input-label {
+    display: inline-block;
+    margin-bottom: 15px;
+}
+.input-group .input-label {
+    display: inline-block;
+    margin-bottom: 15px;
+}
+.input-group label.error {
+    margin: 15px 0;
+    color: red;
+}
+/* card */
+.card {
+    background-color: #fff;
+}
+.card > div {
+    padding: 15px;
+}
+.card-title {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+.card .input-group input {
+    border: 1px solid;
+    border-radius: 0;
+}

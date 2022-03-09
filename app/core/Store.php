@@ -20,6 +20,9 @@ class Store {
 	public function __get($name) {
 		return isset( $this->store[$name] ) ? $this->store[$name] : null;
 	}
+	public function resetValue($valueName, $value) {
+		$this->store[$valueName] = $value;
+	}
     
 
 }

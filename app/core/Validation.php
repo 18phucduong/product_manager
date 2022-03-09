@@ -5,8 +5,9 @@ namespace app\core;
 
 class Validation {
 
-    public $validated = true;
+    protected $validated = true;
     protected $data = array();
+    protected $messages = array();
 
     protected $rules = [
         'max'      => 'checkMaxLength',
@@ -15,12 +16,19 @@ class Validation {
         'email'    => 'checkEmail',
         'url'      => 'checkUrl'
     ];
+    protected $invalidRuleMessages = [
+        'max'      => 'Max length = {$} characters',
+        'min'      => 'Min length = {$} characters',
+        'require'  => 'This field is require',
+        'email'    => 'This field is not email',
+        'url'      => 'This field is not url'
+    ];
     protected $validateDefaultMessage = [
         'success' => 'This filed is valid',
         'error' => 'This field is invalid'
     ];
     public function __construct( $data ) {
-        $this->inputData = $data;
+        $this->data = $data;
     }
 	protected function cleanData($data) {
         $data = trim($data);
@@ -29,6 +37,7 @@ class Validation {
         return $data;
     }
     public function validate($data = array()) {
+        
         $keys = array_keys( $data );
 
         foreach($keys as $key ){
@@ -40,12 +49,11 @@ class Validation {
 
             if( $validated_data['status'] == false ) $this->validated = false;
 
-            $this->data[$key]['value'] = $validated_data['value'];
-            $this->data[$key]['status'] = $validated_data['status'];
-            $this->data[$key]['message'] = $validated_data['message'];
+            $this->data[$key] = $validated_data['value'];
+            $this->messages[$key]['name'] = $key;
+            $this->messages[$key]['status'] = $validated_data['status'];
+            $this->messages[$key]['text'] = $validated_data['message'];
         }
-
-        return $this->data;
     }
     protected function filterKeyInPostRequest($key) {
         $postKeys = array_keys($_POST);
@@ -56,19 +64,52 @@ class Validation {
             }
         }
     }
-    protected function checkRules($name, $rules = array(), $value = '' ) {
+    protected function checkRules($name, $rules = array(), $value = NULL ) {
+        
 
         if( !empty($rules) ) {
-            $current_status = false;
+            $current_status = true;
+            $message = $this->validateDefaultMessage['success'];
             foreach( $rules as $ruleKey => $ruleValue ) {
-                $current_status = call_user_func_array($this->rules[$ruleKey], array($ruleValue, $value));
+                $method = $this->rules[$ruleKey];
+                $current_status = call_user_func_array([$this, $method], array($ruleValue, $value));
+                if  (!$current_status) { 
+                    $message = str_replace('{$}', $ruleValue, $this->invalidRuleMessages[$ruleKey]);
+                    break; 
+                }
             }
-            $message = $current_status == false ? $this->validateDefaultMessage['error'] : $this->validateDefaultMessage['success'];
             return [
                 'status' => $current_status,
                 'value' => $value,
                 'message' => $name. ': '. $message
             ];
         }
-    }    
+    }
+    public function getData() {
+        return $this->data;
+    }
+    public function getMessage() {
+        return $this->messages;
+    }
+    public function isValidated() {
+        return $this->validated;
+    }
+
+    protected function checkMaxLength($number, $value) {
+        if (is_numeric($number) ) {
+            return strlen($value) <= $number ? true : false;
+        }else {
+            die("validate check max length rule invalid");
+        }
+    }
+    protected function checkMinLength($number, $value) {
+        if (is_numeric($number) ) {
+            return strlen($value) >= $number ? true : false;
+        }else {
+            die("validate check min length rule invalid");
+        }
+    }
+    protected function checkRequire($rule_value = false ,$value = false) {
+        return ( $rule_value == true && !empty($value) ) ? true : false;
+    }
 }
