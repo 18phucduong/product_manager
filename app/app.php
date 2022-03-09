@@ -7,9 +7,11 @@ require "core/Model.php";
 require "core/Validation.php";
 require "models/User.php";
 require "models/Tag.php";
+require "models/Product.php";
 require "controllers/HomeController.php";
 require "controllers/TagController.php";
 require "controllers/AuthController.php";
+require "controllers/ProductController.php";
 
 $configs = require_once "configs/main.php";
 use app\core\Router;
@@ -37,6 +39,14 @@ class App {
 		$this->router->post('/tag/update/{id}', 'TagController@update');
 		$this->router->post('/tag/delete/{id}', 'TagController@delete');
 		$this->router->delete('/tag/destroy/{id}', 'TagController@destroy');
+
+		$this->router->get('/product/index', 'ProductController@index');
+		$this->router->get('/product/new', 'ProductController@create');
+		$this->router->post('/product/new', 'ProductController@store');
+		$this->router->get('/product/edit/{id}', 'ProductController@edit');
+		$this->router->post('/product/update/{id}', 'ProductController@update');
+		$this->router->post('/product/delete/{id}', 'ProductController@delete');
+		$this->router->delete('/product/destroy/{id}', 'ProductController@destroy');
 		
 		$this->router->run();
 	}

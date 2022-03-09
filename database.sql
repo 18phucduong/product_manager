@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 CREATE TABLE IF NOT EXISTS `products` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
   `price` int NOT NULL,
   `image` varchar(255) NOT NULL,
   `register` datetime DEFAULT NULL,
