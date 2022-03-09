@@ -2,7 +2,7 @@
 // Validate 
 function checkMaxLength($number, $value) {
 	if (is_numeric($number) ) {
-		return strlen($value) >= $number ? false : true;
+		return strlen($value) <= $number ? true : false;
 	}else {
 		die("validate check max length rule invalid");
 	}
@@ -32,13 +32,16 @@ function sql_value_formatting($value) {
 }
 
 function viewPage($path, array $data, string $masterLayout =''){
+
+	$configs = getConfigs();
 	$defaultMasterLayout = getConfigs()['layout'];
-
-	$layout_path = empty($masterLayout) ? getLayoutPath( $defaultMasterLayout ) : getLayoutPath( $masterLayout );
-
+	$appRootDir = $configs['app_root_dir'];
+	$basePath = $configs['base_path'];
 	$path;
 	extract($data);
 
+	$layout_path = empty($masterLayout) ? getLayoutPath( $defaultMasterLayout ) : getLayoutPath( $masterLayout );	
+	
 	if( file_exists($layout_path) ) {
 		require  $layout_path;
 	}else {
@@ -62,6 +65,10 @@ function view($path, $data) {
 function getConfigs() {
 	$store = app\core\Store::store();
 	return  $store->configs;
+}
+function getConfig($configName) {
+	$store = app\core\Store::store();
+	return  $store->configs[$configName];
 }
 function getSidebarCol(array $items, string $class) {
 

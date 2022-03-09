@@ -1,12 +1,12 @@
-*{
-    box-sizing: border-box;
-}
+*,
 body,
 ul,
 li {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
+
 h1 {
     font-size: 1.875rem;
 }
@@ -478,6 +478,7 @@ Master Layout
     min-height: 100vh;
     background-color: #eee;
 }
+
 /* Main sidebar */
 .main-sidebar-wrap {
     height: 100%;
@@ -540,4 +541,9 @@ Master Layout
 }
 .light-dark-group .button.active {
     background-color: #fff;
+}
+
+/* Content-header */
+.content-header {
+    padding: 15px;
 }

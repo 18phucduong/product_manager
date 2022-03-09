@@ -5,8 +5,9 @@ namespace app\core;
 
 class Validation {
 
-    public $validated = true;
+    protected $validated = true;
     protected $data = array();
+    protected $messages = array();
 
     protected $rules = [
         'max'      => 'checkMaxLength',
@@ -40,12 +41,10 @@ class Validation {
 
             if( $validated_data['status'] == false ) $this->validated = false;
 
-            $this->data[$key]['value'] = $validated_data['value'];
-            $this->data[$key]['status'] = $validated_data['status'];
-            $this->data[$key]['message'] = $validated_data['message'];
+            $this->data[$key] = $validated_data['value'];
+            $this->messages[$key]['status'] = $validated_data['status'];
+            $this->messages[$key]['text'] = $validated_data['message'];
         }
-
-        return $this->data;
     }
     protected function filterKeyInPostRequest($key) {
         $postKeys = array_keys($_POST);
@@ -56,12 +55,14 @@ class Validation {
             }
         }
     }
-    protected function checkRules($name, $rules = array(), $value = '' ) {
+    protected function checkRules($name, $rules = array(), $value = NULL ) {
 
         if( !empty($rules) ) {
-            $current_status = false;
+            $current_status = true;
+            $message = $this->validateDefaultMessage['success'];
             foreach( $rules as $ruleKey => $ruleValue ) {
                 $current_status = call_user_func_array($this->rules[$ruleKey], array($ruleValue, $value));
+                if  (!$current_status) { break; }
             }
             $message = $current_status == false ? $this->validateDefaultMessage['error'] : $this->validateDefaultMessage['success'];
             return [
@@ -70,5 +71,14 @@ class Validation {
                 'message' => $name. ': '. $message
             ];
         }
-    }    
+    }
+    public function getData() {
+        return $this->data;
+    }
+    public function getMessage() {
+        return $this->messages;
+    }
+    public function isValidated() {
+        return $this->validated;
+    }
 }
