@@ -22,7 +22,7 @@ class ProductController {
         ];
         $tag = new Tag;
         $data['dataView']['tags'] = $tag->getAll();
-        viewPage('product/new', $data);
+        return viewPage('product/new', $data);
     }
     public function store() {
         
@@ -73,14 +73,10 @@ class ProductController {
         if( isset($product->tags) ) {
             $product->insertRelationValueFromThirdTable('product_tag', 'product_id', 'tag_id',$product->id, $product->tags);
         }
-        $data['page'] = [
-            'title' => 'Product List'
-        ];
-        $data['dataView']['products'] = $product->getAll();
-        // echo "<pre>";
-        // print_r($data['dataView']['products']);
-        // echo "<pre>";   
-        return viewPage('product/index', $data);
+
+        $baseName = getConfig('base_name');
+        $url = 'localhost/' . $baseName . 'product';
+        redirect($url);
     }
 
     public function edit($id) {
@@ -116,7 +112,7 @@ class ProductController {
             return viewPage('product/edit', $data);
         }        
         // Insert
-        if ( $product->hasColValue('name', $data['dataView']['product']['Product_name']) ) {
+        if ( $product->hasColValue('name', $data['dataView']['product']['product_name']) ) {
             $data['dataView']['message']['product_name']['text'] = 'this name exists';
             return viewPage('product/edit', $data);
         }
@@ -124,7 +120,9 @@ class ProductController {
         //     'name' =>$data['dataView']['product']['name'],
         //     'slug' => toSlug($data['dataView']['product']['slug'])
         // ]);
-        return viewPage('product/index', $data);
+        $baseName = getConfig('base_name');
+        $url = 'localhost/' . $baseName . 'product/edit/'.$id;
+        redirect($url);
     }
 
     public function delete($id) {
