@@ -3,6 +3,7 @@
 namespace app\core;
 
 use app\core\Database;
+use app\core\Validation;
 
 
 class Model extends Database {
@@ -28,6 +29,13 @@ class Model extends Database {
             return "0 results";
         }   
     }
+    protected function validate($data) {
+        $validate = new Validation($_POST);
+        $validate->validate($data);
+        $this->isValidatedForm = $validate->isValidated();
+        $this->setModelPropeties($validate->getData());
+        $this->setMessagePropeties($validate->getMessage()); 
+    }
 
     public function insert($data) {
         $tableCols = array_keys($data);
@@ -49,7 +57,6 @@ class Model extends Database {
         }
         $sql = "INSERT INTO $this->table ( $tableColsText )
         VALUES ( $tableColsValue_text )";
-
         $db = Database::getInstance();
         $mysqli = $db->getConnection();
 
@@ -103,6 +110,36 @@ class Model extends Database {
         $mysqli = $db->getConnection();
         $result =  $mysqli->query($sql);
         $db->disConnect();
+    }
+
+    public function setModelPropeties(array $data) {
+        $replaceList = $this->replaceList;
+        foreach( $replaceList as $key => $value) {
+            $this->$key = isset( $data[$value] ) ? $data[$value] : null;
+        }
+    }
+    protected function setMessagePropeties(array $data) {
+        $replaceList = $this->replaceList;
+        $newArr = [];
+        foreach( $replaceList as $key => $value) {
+            if( isset( $data[$value] )) { $newArr[$key] = $data[$value]; }
+        }
+        $this->message = $newArr;
+    }
+    public function handleImg($property_name, $img){
+        if($img['size'] > ( 1024 * 1024) ) {
+            $this->message->$property_name->status = false;
+            $this->message->$property_name->text = "Max size able";
+            echo getimagesize($img['name']);
+        }
+        if($img['type'] !== 'image/jpeg') {
+            $this->message->$property_name->status = false;
+            $this->message->$property_name->text = "is not jpeg file";
+        }
+        $info = pathinfo($_FILES['product_image']['name']);
+        $ext = $info['extension']; // get the extension of the file
+        $this->$property_name = toSlug($info['filename']).".".$ext; 
+        $this->temporary_file =  $img['tmp_name'];
     }
 
 }

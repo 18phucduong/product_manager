@@ -102,8 +102,9 @@ function toSlug($str) {
     $str = preg_replace('/([\s]+)/', '-', $str);
     return $str;
 }
-function redirect($url, $statusCode = 303)
-{
+function redirect($url, $statusCode = 303){
+	echo $url;
    header('Location: ' . $url, true, $statusCode);
    die();
 }
+

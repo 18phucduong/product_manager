@@ -2,11 +2,11 @@
     $tags = $data['tags'];
     if( isset($data['product']) ) { 
         $product = $data['product'];
-        $productTags = $data['product']['tags'];
+        $productTags = $data['product']->tags;
     }
 ?>
 <div id="main-content" class="container-fluid"> 
-<form action="<?php echo getConfig('base_path')?>/product/new" method="post">     
+<form action="<?php echo getConfig('base_path')?>/product/new" method="post" enctype="multipart/form-data">     
     <div class="row">   
         <div class=" col">
             <h3>Title</h3>
@@ -28,7 +28,7 @@
         </div>
         <div class="col f-grow-0 max-w-300">
             <div class="left-sidebar">
-                <div class="card">
+                <div class="card mb-2">
                     <div class="card-head">
                         <p class="card-title">Product</p>
                     </div>
@@ -55,6 +55,21 @@
                                 }
                             ?>
                             </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+
+                    </div>
+                </div>
+
+                <div class="card mb-2">
+                    <div class="card-head">
+                        <p class="card-title">Product Image</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="input-group">
+                            <span class="input-label">IMG</span>
+                            <input type="file" name="product_image" id="">
                         </div>
                     </div>
                     <div class="card-footer">

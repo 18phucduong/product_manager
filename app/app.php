@@ -40,7 +40,7 @@ class App {
 		$this->router->post('/tag/delete/{id}', 'TagController@delete');
 		$this->router->delete('/tag/destroy/{id}', 'TagController@destroy');
 
-		$this->router->get('/product/index', 'ProductController@index');
+		$this->router->get('/product', 'ProductController@index');
 		$this->router->get('/product/new', 'ProductController@create');
 		$this->router->post('/product/new', 'ProductController@store');
 		$this->router->get('/product/edit/{id}', 'ProductController@edit');

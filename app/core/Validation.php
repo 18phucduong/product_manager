@@ -21,7 +21,7 @@ class Validation {
         'error' => 'This field is invalid'
     ];
     public function __construct( $data ) {
-        $this->inputData = $data;
+        $this->data = $data;
     }
 	protected function cleanData($data) {
         $data = trim($data);
@@ -30,6 +30,7 @@ class Validation {
         return $data;
     }
     public function validate($data = array()) {
+        
         $keys = array_keys( $data );
 
         foreach($keys as $key ){
