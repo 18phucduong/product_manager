@@ -3,6 +3,8 @@ namespace app\controllers;
 
 use app\core\Validation;
 use app\models\Product;
+use app\models\Tag;
+
 class ProductController {
 
     public function index() {
@@ -16,44 +18,68 @@ class ProductController {
 
     public function create() {
         $data['page'] = [
-            'title' => 'Product List'
+            'title' => 'New Product'
         ];
+        $tag = new Tag;
+        $data['dataView']['tags'] = $tag->getAll();
         viewPage('product/new', $data);
     }
     public function store() {
+        
         // get data
         $data['page'] = [
-            'title' => 'Product List'
+            'title' => 'New Product'
         ];
+        $tag = new Tag;
         $product = new Product;
-        // viewPage('product/new', $data);
 
+        $data['dataView']['tags'] = $tag->getAll();
+        if(isset($_POST['product_tags'])) {
+            $product->tags = $data['dataView']['product']['tags'] = array_filter($_POST['product_tags']);
+        }
+        
         if(empty($_POST['createProductForm'])) { return; }
-        // Validate
+        // Validate;
+
         $validate = new Validation($_POST);
         $validate->validate([
-            'name' => [
+            'product_name' => [
                 'require' => true,
                 'min' => 3,
                 'max' => 20
             ],
+            'product_price' => [
+                'require' => true
+            ]
         ]);
 
         $data['dataView']['product'] = $validate->getData();
         $data['dataView']['message'] = $validate->getMessage();
-
+        
         if( !$validate->isValidated() ) {
             return viewPage('product/new', $data);
-        }        
+        }    
+         
         // Insert
-        if ( $product->hasColValue('name', $data['dataView']['product']['Product_name']) ) {
+        if ( $product->hasColValue('name', $data['dataView']['product']['product_name']) ) {
             $data['dataView']['message']['name']['text'] = 'this name exists';
             return viewPage('product/new', $data);
         }
         $product->insert([
-            'name' =>$data['dataView']['product']['name'],
-            'slug' => toSlug($data['dataView']['product']['slug'])
+            'name' =>$data['dataView']['product']['product_name'],
+            'price' =>intval($data['dataView']['product']['product_price']),
+            'slug' => toSlug($data['dataView']['product']['product_name'])
         ]);
+        if( isset($product->tags) ) {
+            $product->insertRelationValueFromThirdTable('product_tag', 'product_id', 'tag_id',$product->id, $product->tags);
+        }
+        $data['page'] = [
+            'title' => 'Product List'
+        ];
+        $data['dataView']['products'] = $product->getAll();
+        // echo "<pre>";
+        // print_r($data['dataView']['products']);
+        // echo "<pre>";   
         return viewPage('product/index', $data);
     }
 
@@ -91,7 +117,7 @@ class ProductController {
         }        
         // Insert
         if ( $product->hasColValue('name', $data['dataView']['product']['Product_name']) ) {
-            $data['dataView']['message']['name']['text'] = 'this name exists';
+            $data['dataView']['message']['product_name']['text'] = 'this name exists';
             return viewPage('product/edit', $data);
         }
         // $product->update([

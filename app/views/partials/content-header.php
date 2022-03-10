@@ -8,3 +8,6 @@
         </div>
     </div>
 </div>
+<div class="container-fluid">
+    <h1><?php echo $page['title']?></h1>
+</div>

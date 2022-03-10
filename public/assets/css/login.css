@@ -1,0 +1,76 @@
+.wrapper.login-page {
+    background-color: #ebebeb;
+}
+/* login-form */
+.login-form {
+    min-height: 100vh;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+}
+.login-form__inner {
+    width: 100%;
+    border-radius: 30px;
+    background-color: #fff;
+    overflow: hidden;
+}
+.login-form__inner .left-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    padding: 50px 30px;
+    background-color: #89CFF0;
+    
+}
+.login-form__inner .left-form__img {
+    margin-bottom: 30px;
+} 
+.login-form__inner .left-form__text {
+    max-width: 200px;
+} 
+.login-form__inner .right-form {
+    max-width: 400px;
+    padding: 90px 30px 30px 30px;
+}
+.login-form__inner .right-form > div {
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.login-form__inner .right-form__bottom {
+    margin-top: 150px;
+}
+/* form */
+.input-group.float-label {
+    position: relative;
+    border: 1px solid aqua;
+}
+.input-group.float-label label,
+.input-group.float-label i {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    transition: 0.35s;
+}
+.input-group.float-label label  {
+    left: 15px;
+    right: unset;
+    display: inline-block;
+    padding: 5px;
+    background-color: #fff;
+}
+.input-group.float-label {
+    width: 100%;
+}
+.input-group.float-label  input:focus ~ label,
+.input-group.float-label  input:valid ~ label {
+    top: 0;
+    font-size:14px;
+    color: #009688;
+}
+.input-group  input:valid ~ i {
+    color: #009688 ;
+}

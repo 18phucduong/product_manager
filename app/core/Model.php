@@ -52,7 +52,12 @@ class Model extends Database {
 
         $db = Database::getInstance();
         $mysqli = $db->getConnection();
-        $mysqli->query($sql);
+
+        $result =  $mysqli->query($sql);
+        if($result == 1) {
+            $data = $this->getData("SELECT * FROM $this->table ORDER BY id DESC LIMIT 1")[0];
+            $this->fillModelPropertiesData($data);
+        }
         $db->disConnect();
     }
     public function hasColValue($colName, $value){
@@ -70,6 +75,34 @@ class Model extends Database {
     public function deleteId( $id, $id_col = 'id' ) {
         return $this->getData("DELETE FROM $this->table WHERE $id_col=$id");
     }
+    protected function fillModelPropertiesData(array $properties){
+        foreach($properties as $property => $value) {
+            $this->$property = $value;
+        }
+    }
 
+    public function getRelationValueFromThirdTable($value, $linkedTable, $linkedCol, $relationColName){
+        $sql = "SELLECT $relationColName from $linkedTable WHERE $linkedCol = sqlValueFormatting($value)";
+        return $this->getData($sql);
+    }
+    public function insertRelationValueFromThirdTable(string $linkedTable, string $colName, string $relationName,$value, array $relationValues){
+       
+        $relationValuesText = '';
+        for( $i=0; $i < count($relationValues); $i++ ) {
+
+            $relationValue_text =  sqlValueFormatting($relationValues[$i]);
+            $valueText = sqlValueFormatting($value);
+            $valueSqlText = "( $valueText, $relationValue_text )";
+
+            $relationValuesText .= ($i < count($relationValues) -1 ) ?  ( $valueSqlText . ', ') : $valueSqlText;
+        }
+        $sql = "INSERT INTO $linkedTable( $colName, $relationName )
+        VALUES  $relationValuesText ";
+
+        $db = Database::getInstance();
+        $mysqli = $db->getConnection();
+        $result =  $mysqli->query($sql);
+        $db->disConnect();
+    }
 
 }
