@@ -24,43 +24,35 @@ class AuthController {
 
       if(empty($_POST['login'])) { return; }
       // Validate
-      $validate = new Validation($_POST);
-      $data = $validate->validate([
-         'user_name' => [
-            'require' => true,
-            'min' => '6'
-         ],
-         'password' => [
-            'require' => true,
-            'min' => 8,
-            'max' => 50
-         ]
-      ]);
-
-      if(  $validate->validated == false ) {
-         $this->validateFail($data);
-      }
+      $user = new User;
       // Check user in database
-      $user = $this->checkUser($data['user_name']['value'],$data['password']['value']);
+      $dataUser = $this->checkUser($user->user_name, $user->password);
+
       
-      if( !gettype($user) == 'array') {       
-         $this->accountVerificationFailed($data,'user_name','password');
+      if( gettype($dataUser) == 'array' ) {     
+         echo "<pre>";
+      print_r($dataUser);
+      echo "</pre>";
+         $this->rememberAccount($user->user_name, $user->password);
+         $user->fillModelPropertiesData($dataUser);
+         redirect('http://localhost/product_manager/public/home');  
       }
-      else {
-         // remember account
-         echo "login success";
-         $this->rememberAccount($data['user_name']['value'], $data['password']['value']);
-      }
+      $user->message->user_name['status'] = false;
+      $user->message->user_name['text']  = 'Username or Password is incorrect';
+      $this->isValidatedForm = false;
+      $data['dataView']['user'] = $user;
+      return viewPage('auth/login', $data,'no-header-footer');
+      
    }
 
    protected function checkUser($user_name, $password){
       $user_name = sqlValueFormatting( $user_name );
       $password = sqlValueFormatting( md5($password) );
-
       $sql="select * from users where user_name=". $user_name . 'and password='.  $password;
+      
       $user = new User;
-
-      return $user->getData($sql)[0];
+      $data = $user->getData($sql);
+      return gettype($data) == 'array' ? $data : false;
    }
 
    protected function rememberAccount($user_name, $password) {
@@ -80,11 +72,7 @@ class AuthController {
       return;
    }
 
-   protected function accountVerificationFailed($data, $id_name, $pass_name) {
-      $data[$id_name]['status'] = $data[$pass_name]['status'] = false;
-      $data[$id_name]['message'] = $data[$pass_name]['message'] = 'Username or Password is incorrect';
-
-      $this->validateFail($data);
+   protected function accountVerificationFailed($id_name, $pass_name) {
+      
    }
-
 }

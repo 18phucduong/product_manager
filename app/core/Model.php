@@ -82,7 +82,7 @@ class Model extends Database {
     public function deleteId( $id, $id_col = 'id' ) {
         return $this->getData("DELETE FROM $this->table WHERE $id_col=$id");
     }
-    protected function fillModelPropertiesData(array $properties){
+    public function fillModelPropertiesData(array $properties){
         foreach($properties as $property => $value) {
             $this->$property = $value;
         }

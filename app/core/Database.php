@@ -1,7 +1,7 @@
 <?php
 namespace app\core;
 
-// use app\core\Store;
+use app\core\QueryBuilder;
 
 class Database {
 
@@ -31,6 +31,7 @@ class Database {
 
 		$this->connect(); 
 	}
+	
 
 	public function connect() {
 

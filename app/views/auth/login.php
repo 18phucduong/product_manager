@@ -28,16 +28,16 @@
                                             <div class="input-group round float-label">
                                                 <input type="text" name="user_name" id="user_name" value="<?php if(isset($_COOKIE["user_name"])) { echo $_COOKIE["user_name"]; } ?>" required >
                                                 <label for="user_name">Username</label>
-                                                <i class="fa-solid fa-at"></i>
+                                                <i class="fa fa-user" aria-hidden="true"></i>
                                             </div>
                                             <div class="input-group round float-label">
                                                 <input type="password" name="password" id="password" value="<?php if(isset($_COOKIE["password"])) { echo $_COOKIE["password"]; } ?>" required >
                                                 <label for="password">Password</label>
-                                                <i class="fa-solid fa-key"></i>
+                                                <i class="fa fa-lock" aria-hidden="true"></i>
                                             </div>
                                             <div class="row row-collapse mb-2">
                                                 <div class="col col-6">
-                                                    <div class="input-group">
+                                                    <div class="checkbox-group">
                                                         <input type="checkbox" name="remember_pass" id="remember_pass" checked>
                                                         <label for="remember_pass" class="is-small color-gray">Remember password</label>
                                                     </div>
