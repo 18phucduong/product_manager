@@ -8,9 +8,6 @@ class AutoLoad {
 	}
 	private function autoload($class) {
 
-        $classNameInNameSpace = explode('\\', $class);
-        $className = end($classNameInNameSpace);
-
         $filePath = $this->rootDir.'\\'.$class.'.php';
 
         if( file_exists($filePath) ) 

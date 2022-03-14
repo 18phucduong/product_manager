@@ -1,6 +1,6 @@
 <?php
 error_reporting(E_ERROR | E_PARSE);
-
+if( !isset($_SESSION) ) { session_start(); }
 require_once "helpers/helpers.php";
 require_once "core/AutoLoad.php";
 $configs = require_once "configs/main.php";

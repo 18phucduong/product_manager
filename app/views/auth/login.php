@@ -46,8 +46,8 @@
                                             <div class="row row-collapse mb-2">
                                                 <div class="col col-6">
                                                     <div class="checkbox-group">
-                                                        <input type="checkbox" name="remember" id="remember" checked>
-                                                        <label for="remember" class="is-small color-gray">Remember password</label>
+                                                        <input type="checkbox" name="remember" id="remember" >
+                                                        <label for="remember" class="is-small color-gray">Remember me</label>
                                                     </div>
                                                 </div>
                                                 <div class="col col-6 text-right">

@@ -1,11 +1,14 @@
 <?php  
     session_start();
-    if (isset($_SESSION['dataPage']) && !empty($_SESSION['dataPage']) ) {    
+    if (isset($_SESSION['dataPage']) && !empty($_SESSION['dataPage']) ) {
         $page = $_SESSION['dataPage']['page'];
         $dataView = $_SESSION['dataPage']['dataView'];
         unset($_SESSION['dataPage']);
+
+    
     }
-    session_destroy();
+    
+    $viewRoot = getConfigs('app_root_dir').'/views';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,17 +20,23 @@
     <link rel="stylesheet" href="<?php echo getUrlFromBasePath('/assets/css/admin.css')?>">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <script  src="<?php echo getUrlFromBasePath('/assets/js/product.js')?>" type="text/javascript"></script>
-    <title>Website</title>
+    <title><?php echo $page['title']?></title>
 </head>
 <body>
     <div class="wrapper">
         <div>
+            
             <div class="row row-collapse">
                 <div id="admin-menu" class="col max-w-350 full-height min-h-100">
-                    <?php require dirname(__DIR__)."/blocks/main-sidebar.php"?>
+                    <?php require $viewRoot . "/blocks/main-sidebar.php"?>
                 </div>
                 <div id="admin-content" class="col">
-                    <?php require dirname(__DIR__)."/blocks/content.php"?>                 
+                    <div class="admin-content__wrap">
+                        <?php 
+                            require $viewRoot . "/partials/content-header.php";
+                            view($path, $dataView);
+                        ?>
+                    </div>             
                 </div>
             </div>
         </div>

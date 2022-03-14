@@ -4,7 +4,6 @@
         $data = $_SESSION['dataPage'];
     }
     unset($_SESSION['email']);
-    session_destroy();
 ?>
 <!DOCTYPE html>
 <html lang="en">

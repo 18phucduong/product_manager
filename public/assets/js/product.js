@@ -7,7 +7,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
       output.src = URL.createObjectURL(event.target.files[0]);
       output.className = "show mb-1";
       output.onload = function() {
-        URL.revokeObjectURL(output.src) // free memory
+        URL.revokeObjectURL(output.src)
       }
     });
 });

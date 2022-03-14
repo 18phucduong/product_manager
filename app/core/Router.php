@@ -63,7 +63,7 @@ class Router {
 		    	continue;
 			}
 			if ($this->hasNoCloseParamCharacter($route['url'])) {continue;}
-
+			
 			$routeParams = array_filter(explode( '/', $route['url']));
 			$requestParams = array_filter(explode( '/', $requestUrl));
 			
@@ -116,14 +116,10 @@ class Router {
 		$paramPositions = [];
 		foreach($routeParams as $index => $param) {
 			if(strpos($param, '{') !== false ) {
-				$paramPositions[] = $index;
+				continue;
 			}
+			if ( $param !=  $requestParams[$index] ) { return true; }
 		}
-		foreach($paramPositions as $position) {
-			unset($routeParams[$position]);
-			unset($requestParams[$position]);
-		}
-		return  array_diff($routeParams, $requestParams ) == false ? false : true;
 	}
 	private function run() {
 		$this->mapRouters();

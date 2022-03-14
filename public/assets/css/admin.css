@@ -114,7 +114,8 @@ Master Layout
     display: inline-block;
     margin-bottom: 15px;
 }
-.input-group label.error {
+label.error {
+    display: block;
     margin: 15px 0;
     color: red;
 }

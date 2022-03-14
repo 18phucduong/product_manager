@@ -6,15 +6,15 @@ use app\core\Model;
 use app\core\Store;
 
 class User extends Model {
-
-    protected $replaceList = [
-        'user_name' => 'user_name',
-        'password' => 'password',
+    protected $table = 'users';
+    protected $ableProperties = [
+        'user_name',
+        'password',
     ];
 
     public function __construct(){
         parent::__construct();
-        $this->table = 'users';
+        
         $this->validate([
             'user_name' => [
                 // 'require' => true,

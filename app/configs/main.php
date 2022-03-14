@@ -1,5 +1,6 @@
 <?php
 return [
+	'upload_dir' => dirname(dirname(dirname(__FILE__))).'/public/assets/images/',
 	'base_path' => '/product_manager/public',
 	'app_root_dir' => dirname(dirname(__FILE__)),
 	'public_root_dir' => dirname(dirname(dirname(__FILE__))).'/public',
@@ -12,16 +13,4 @@ return [
 	],
 	'layout' => 'admin-master',
 	// Sidebar configs
-	// File configs
-	'file' => [
-		'upload_dir' => dirname(dirname(dirname(__FILE__))).'/public/assets/images',
-		'max_size' => 1024 * 1024,
-		'allowed_size' => [
-			'jpg',
-			'jpeg', 
-			'png', 
-			'webp', 
-			'gif'
-		]
-	]
 ];

@@ -17,11 +17,10 @@ function sqlValueFormatting($value) {
 function viewPage($path, array $data, string $masterLayout =''){
 
 	$configs = getConfigs();
-	$defaultMasterLayout = getConfigs()['layout'];
-	$appRootDir = $configs['app_root_dir'];
-	$basePath = $configs['base_path'];
+	$defaultMasterLayout = $configs['layout'];
+
 	$path;
-	extract($data);
+	extract( $data );
 
 	$layout_path = empty($masterLayout) ? getLayoutPath( $defaultMasterLayout ) : getLayoutPath( $masterLayout );	
 	
@@ -32,21 +31,24 @@ function viewPage($path, array $data, string $masterLayout =''){
 	}
 }
 function getLayoutPath(string $layout) {
-	return getConfigs()['app_root_dir'] .'\\views\\layout\\'. $layout .'.php';
+	return getConfigs('app_root_dir').'\\views\\layout\\'. $layout .'.php';
 }
 function view($path, $data = null) {
-
 	extract($data);
 	
-	$requirePath = getConfigs()['app_root_dir'] .'\\views\\' . $path . '.php';
+	$requirePath = getConfigs('app_root_dir').'\views\\' . $path . '.php';
 	if( file_exists($requirePath) ) {
 		require  $requirePath;
 	}else {
 		return $requirePath." not found";
 	}
 }
-function getConfigs() {
+function getConfigs($config = null) {
 	$store = app\core\Store::store();
+
+	if( $config ) {
+		return $store->configs[$config];
+	}
 	return  $store->configs;
 }
 function getConfig($configName) {
@@ -54,7 +56,9 @@ function getConfig($configName) {
 	return  $store->configs[$configName];
 }
 // toSlug
-function toSlug($str) {
+function toSlug( $str, string $str1 = null) {
+	if( !empty($str1) ) { return $str1; }
+	
     $str = trim(mb_strtolower($str));
     $str = preg_replace('/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/', 'a', $str);
     $str = preg_replace('/(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)/', 'e', $str);
@@ -82,12 +86,9 @@ function randomString(int $number)
 }
 function viewValidateMessage($data) {
 	$name = $data['name'];
-	$status = $data['status'];
 	$text = $data['text'];
-	$class = $status ? 'success' : 'error';
-	if(!$status) {
-		echo "<label for='$name' generated='true' $status class='$class'>$text</label>";
-	}
+	
+	echo "<label for='$name' generated='true' class='error'>$text</label>";
 }
 function isChecked($value, $checkList) {
 	if(gettype($checkList) == 'string' && $value == $checkList) {
@@ -103,8 +104,7 @@ function setRoute($method, $url, $controllerMethod, $name = null ) {
 	return [
 		'method' => $method,
 		'url' => $url,
-		'controller_method' => $controllerMethod,
-		'name' => $name
+		'controller_method' => $controllerMethod
 	];
 }
 
@@ -169,8 +169,9 @@ function getUrlFromBasePath($path) {
 }
 
 function redirectRoute($routeName, $data = null) {
-
+	// die(router()->currentRoute);
 	$url = route($routeName);
+	if( router()->currentRoute == $routeName) { return; }
 	session_start();
     if ( $data != null) { 
 
@@ -180,4 +181,20 @@ function redirectRoute($routeName, $data = null) {
 	
 	header('Location: ' . $url, true);
 	die();
+}
+function auth() {
+	return app\models\Authentication::auth();
+}
+function convertSizeToNumber(string $string) {
+	$number = explode('|', $string)[0];
+	
+	$tail = explode('|', $string)[1];
+	if( !is_numeric($number) ) { return false; }
+	if( $tail == 'M' ) {
+		return floatval($number) * 1024*1024;
+	}
+	if( $tail == 'K' ) {
+		return floatval($number) * 1024;
+	}
+	return false;
 }

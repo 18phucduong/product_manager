@@ -12,9 +12,9 @@ trait QueryBuilder {
 	protected $limit;
 	protected $offset;
 
-	public static function table( $table_name ) {
-		$db = new self;
-		$db->table = $table_name;
+	public static function table( $tableName ) {
+		$db = self::getInstance();
+		$db->table = $tableName;
 		return $db;
 	}
 
@@ -32,8 +32,17 @@ trait QueryBuilder {
 		$this->wheres[] = [ 
             'col'        => $column, 
             'operator'   => $operator, 
-            'value'      => $value,
-            'connect'    => 'and' 
+            'value'      => sqlValueFormatting($value),
+            'connect'    => 'AND' 
+        ];
+		return $this;
+	}
+	public function orWhere( $column, $operator, $value) {
+		$this->wheres[] = [ 
+            'col'        => $column, 
+            'operator'   => $operator, 
+            'value'      => sqlValueFormatting($value),
+            'connect'    => 'OR' 
         ];
 		return $this;
 	}
@@ -72,9 +81,6 @@ trait QueryBuilder {
 	}
 
 	public function get() {
-
-		return $this->table;
-
 		if( !isset( $this->table ) || empty( $this->table )) {
 			return false;
 		}
@@ -84,7 +90,7 @@ trait QueryBuilder {
 		if( isset( $this->columns ) && is_array( $this->columns ) ) {
 			$sql .= implode(' ,', $this->columns );
 		}else {
-			$sql .= " *";
+			$sql .= " $this->columns";
 		}
 
 		$sql .= " FROM ". $this->table;
@@ -119,11 +125,11 @@ trait QueryBuilder {
 				$col =  $where['col'];
 				$operator =  $where['operator'];
 				$value =  $where['value'];
-				$sql .= " $col $operator $value";
 
-				if( $where_key < count( $this->wheres ) -1 ) {
-					$sql .= strtolower( $where['connect'] ) === 'and' ? ' AND' : ' OR';
+				if( $where_key > 0 ) {
+					$sql .=  $where['connect'];
 				}
+				$sql .= " $col $operator $value ";
 			}
 		}
 
@@ -140,17 +146,108 @@ trait QueryBuilder {
 		if( isset( $this->offset ) ) {
 			$sql .= " OFFSET $this->offset";
 		}
-
-		$result = $this->query( $sql );
-
-		$data = [];
+		$result = $this->query($sql);
+		$this->resetQueryProperties();
 		if ($result->num_rows > 0) {
 		  while($row = $result->fetch_assoc()) {
 		    $data[] = $row;
 		  }
 		  return $data;
 		} else {
-		  return "0 results";
+		  return false;
 		}
 	}
+	public function delete() {
+		if( !isset( $this->table ) || empty( $this->table )) {
+			return false;
+		}
+		$sql = "DELETE FROM $this->table ";
+
+		if( isset( $this->wheres ) && is_array( $this->wheres ) ) {
+			$sql .= " WHERE ";
+			foreach ($this->wheres as $where_key => $where) {
+				$col =  $where['col'];
+				$operator =  $where['operator'];
+				$value =  $where['value'];
+
+				if( $where_key > 0 ) {
+					$sql .=  $where['connect'];
+				}
+				$sql .= " $col $operator $value ";
+			}
+		}
+		$result = $this->query($sql);
+
+		$this->resetQueryProperties();
+		return $result;
+	}
+	public function insert($insertData, $multiple = false) {
+		$insertData = array_filter($insertData);
+		$sql = '';
+		
+		if( !$multiple) {
+			$sql .= $this->createInsertSql($insertData);
+		}else {
+			foreach($insertData as $insertItem) {
+				$sql .= $this->createInsertSql($insertItem);
+			}
+		}
+        $result = $this->query($sql);
+
+		$this->resetQueryProperties();
+        return $result;
+    }
+	public function all() {
+        return $this->select('*')->get();
+    }
+
+    public function findById($id) {
+        return $this->select('*')->where('id', '=', $id)->get();
+    }
+
+	public function inDataBase($colName, $value){
+        $result = $this->select('*')->where($colName, '=', $value)->get();
+        return $result != false;
+    }
+
+	public function findByCol($colName, $value) {
+		return $this->select('*')->where($colName, '=', $value)->get();
+	}
+	public function newest() {
+		return $this->select('*')->limit(1)->get()[0];
+	}
+
+	private function resetQueryProperties() {
+		$this->table = null;
+		$this->wheres = null;
+		$this->district = null;
+		$this->select = null;
+		$this->joins = null;
+		$this->limit = null;
+		$this->orderBy = null;
+		$this->offset = null;
+	}
+	function createInsertSql($data) {
+		
+        $tableCols = array_keys($data);
+        $tableColsValue = array_values($data);
+        $tableColsText = '';
+
+        for( $i=0; $i < count($tableCols); $i++ ) {
+            if($i < count($tableCols) -1 ) {
+                $tableColsText .= $tableCols[$i] . ', ';
+            }else{
+                $tableColsText .= $tableCols[$i];
+            }
+        }
+        $tableColsValue_text = '';
+        for( $i=0; $i < count($tableColsValue); $i++ ) {
+            $value = sqlValueFormatting($tableColsValue[$i]);
+
+            $tableColsValue_text .= ($i < count($tableColsValue) -1 ) ?  ( $value . ', ') : $value;
+        }
+        return  "INSERT INTO $this->table ( $tableColsText )
+        VALUES ( $tableColsValue_text );";
+	}
 }
+

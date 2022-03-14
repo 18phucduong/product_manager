@@ -20,14 +20,9 @@ class Image {
             $this->setErrorMessage("unknown file $filename");
             return;
         } 
-        if( empty($_FILES[$filename]) ) {
-            die("qq");
-            return;
-        }
         $file = $_FILES[$filename];
         // Check file Error
         if($this->isFileError($file)) { 
-            $this->setErrorMessage("Please provide image");
             return; 
         }
 

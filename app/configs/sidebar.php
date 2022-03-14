@@ -27,10 +27,10 @@ return [
                 'link' => route('product.new'),
                 'route' => 'product.new'
             ],
-            [
-                'icon' => 'tags',
-                'text' => 'Tag',
-                'link' => route('tag.index'),
-                'route' => 'tag.index'
-            ]
+            // [
+            //     'icon' => 'tags',
+            //     'text' => 'Tag',
+            //     'link' => route('tag.index'),
+            //     'route' => 'tag.index'
+            // ]
         ];
