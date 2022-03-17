@@ -61,7 +61,7 @@ class Product extends Model {
         //insert file
         $moveFileStatus = move_uploaded_file( $_FILES['image']['tmp_name'],  $product['image']);
         if( !$moveFileStatus) {
-            Database::table('products')->where('id','=', $product['id'])->where()->delete();
+            Database::table('products')->where('id','=', intval($product['id']))->where()->delete();
             die("Can't move Product Image"); 
         }
         
