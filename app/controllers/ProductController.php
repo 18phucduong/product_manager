@@ -15,9 +15,10 @@ class ProductController {
         $data['page'] = [
             'title' => 'Product list'
         ];
-        return viewPage('product', $data);
+        
+        $data['dataView']['products'] = Database::table('products')->pagination(10,1);
+        return viewPage('product/index', $data);
     }
-
     public function create() {
         $data['page'] = [
             'title' => 'New Product'

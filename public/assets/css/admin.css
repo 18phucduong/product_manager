@@ -68,8 +68,10 @@ Master Layout
 .light-dark-group .button.active {
     background-color: #fff;
 }
-
-
+/* Main content */
+#main-content { 
+    padding-bottom: 15px;
+}
 /* Content-header */
 .content-header {
     padding: 15px;
@@ -134,4 +136,8 @@ label.error {
 .card .input-group input {
     border: 1px solid;
     border-radius: 0;
+}
+/* table */
+#product-table table {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
