@@ -13,6 +13,6 @@ class ProductController {
         view('product/products-table',['products' => $pagination]);
     }
     public function delete($id)  {
-        
+        echo $id;
     }
 }
