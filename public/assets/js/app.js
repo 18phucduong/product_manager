@@ -30,7 +30,7 @@ function paginate(page, reloadElement){
           }
       }
   }
-  xhr.open('POST', 'http://localhost/product_manager/public/api/product/paginate');
+  xhr.open('GET', 'http://localhost/product_manager/public/api/product/paginate');
   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
   xhr.send('page=' + encodeURIComponent(page));
 }

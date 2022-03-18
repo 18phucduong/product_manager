@@ -19,6 +19,6 @@
     $routes['product.update'] = setRoute('post', '/product/update/{id}', 'ProductController@update');
     $routes['product.delete'] = setRoute('delete', '/product/delete{id}', 'ProductController@delete');
 
-    $routes['api.product.index'] = setRoute('post', '/api/product/paginate', 'ProductController@index');
+    $routes['api.product.index'] = setRoute('get', '/api/product/paginate', 'ProductController@index');
 
     return $routes;

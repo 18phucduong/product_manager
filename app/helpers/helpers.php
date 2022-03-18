@@ -243,5 +243,5 @@ function getRelationRowsManyToManyRelationship($fromId,$fromTable, $toTable, $re
         JOIN $toTable $toTable
         ON $relationTable.tag_id = $toTable.id
         WHERE $fromTable.id=$fromId";
-	return Database::table('products')->getData($sql);
+	return Database::table($fromTable)->getData($sql);
 }
