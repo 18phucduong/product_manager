@@ -3,69 +3,65 @@
 namespace app\core;
 
 use app\core\Database;
+use app\core\Store;
+use app\core\Validation;
 
-
-class Model extends Database {
-
-    protected $table_name;
+class Model {
     
     public function __construct() {
-        parent::__construct();
+        $this->setModelProperties();
+        
     }
-    
-    public function getData($sql) {
+    public function validate($modelRules = null) {
+
+        if( is_null( $modelRules ) ) { $modelRules = $this->modelRules; }
+        $modelName = $this->getModelName();
+        $validate = new Validation($modelName,$this->table);
+        $validate->validate($this->ableProperties
+        , $modelRules);
+        $store = Store::store();
+        $store->addElementToArrayInStore('validate', $modelName, $validate);
+        return $validate->data;
+    }
+    public function fillModelPropertiesData(array $properties){
+        foreach($properties as $property => $value) {
+            $this->$property = $value;
+        }
+    }
+
+    public function setModelProperties() {
+        if( !isset($this->ableProperties) ) { return; }
+        
+        $modelProperties = $this->ableProperties;
+        foreach( $modelProperties as $property ) {
+            $this->$property = null;
+        }
+    }
+    public function setTable($tableName) {
+        $this->table = $tableName;
+    }
+    protected function getModelName() {
+        $className = get_class($this);
+        $modelName = str_replace('app\\models\\' , '', $className );
+        return strtolower($modelName);
+    }
+    public function insertRelationValueFromThirdTable(string $linkedTable, string $colName, string $relationName,$value, array $relationValues){
+       
+        $relationValuesText = '';
+        for( $i=0; $i < count($relationValues); $i++ ) {
+
+            $relationValue_text =  sqlValueFormatting($relationValues[$i]);
+            $valueText = sqlValueFormatting($value);
+            $valueSqlText = "( $valueText, $relationValue_text )";
+
+            $relationValuesText .= ($i < count($relationValues) -1 ) ?  ( $valueSqlText . ', ') : $valueSqlText;
+        }
+        $sql = "INSERT INTO $linkedTable( $colName, $relationName )
+        VALUES  $relationValuesText ";
 
         $db = Database::getInstance();
-        $mysqli = $db->getConnection(); 
-        $result = $mysqli->query($sql);
+        $mysqli = $db->getConnection();
+        $result =  $mysqli->query($sql);
         $db->disConnect();
-
-        if ($result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {
-                $data[] = $row;
-            }
-            return $data;
-        }else {
-            echo "0 results";
-        }   
     }
-
-    public function insert($data) {
-        $table_cols = array_keys($data);
-        $table_cols_value = array_values($data);
-        $table_cols_text = '';
-
-        for( $i=0; $i < count($table_cols); $i++ ) {
-            if($i < count($table_cols) -1 ) {
-                $table_cols_text .= $table_cols[$i] . ', ';
-            }else{
-                $table_cols_text .= $table_cols[$i];
-            }
-        }
-        $table_cols_value_text = '';
-        for( $i=0; $i < count($table_cols_value); $i++ ) {
-            $value = sql_value_formatting($table_cols_value[$i]);
-
-            $table_cols_value_text = ($i < count($table_cols_value) -1 ) ?  ( $value . ', ') : $value;
-        }
-        $sql = "INSERT INTO $this->table_name ( $table_cols_text )
-        VALUES ( $table_cols_value_text )";
-
-        $db = Database::getInstance();
-        $mysqli = $db->getConnection(); 
-        $mysqli->query($sql);
-        $db->disConnect();
-
-    }
-
-    public function findId( $id, $id_col = 'id' ) {
-        $this->getData("SELECT * FROM $this->table_name WHERE $id_col=$id");
-    }
-
-    public function deleteId( $id, $id_col = 'id' ) {
-        $this->getData("DELETE FROM $this->table_name WHERE $id_col=$id");
-    }
-
-
 }
-

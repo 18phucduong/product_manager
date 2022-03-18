@@ -1,10 +1,27 @@
 <?php
 namespace app\controllers;
 
-use app\core\Store;
+use app\models\Tag;
+use app\models\Product;
+use app\core\Database;
 class HomeController {
+    public function __construct(){
+        // auth()->check();     
+    }
 
     public function index() {
+
+     
+        
+
+        // $sql = "SELECT t.*
+        // FROM products p
+        // JOIN product_tag pt
+        // ON p.id = pt.product_id
+        // JOIN tags t
+        // ON pt.tag_id = t.id
+        // WHERE p.id=46";
+
         $data = [
             'page' => [
                 'title' => '',
@@ -19,6 +36,6 @@ class HomeController {
                 'total_pages' => 6
             ]
         ];
-        viewPage('dashboarth', $data);
+         viewPage('dashboard', $data);
     }
 }

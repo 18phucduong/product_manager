@@ -1,4 +1,8 @@
-
+<?php
+    if( isset($user->message)) {
+        $message = $user->message;
+    }
+?>
 <div class="wrapper login-page">
     <div class="container">
         <div class="row">
@@ -26,20 +30,24 @@
                                     <div class="right-form__main mb-2">
                                         <form action="/product_manager/public/login" method="post" name="login-form" id="login-form">
                                             <div class="input-group round float-label">
-                                                <input type="text" name="user_name" id="user_name" value="<?php if(isset($_COOKIE["user_name"])) { echo $_COOKIE["user_name"]; } ?>" required >
+                                                <input type="text" name="user_name" id="user_name" value="<?php echo isset($user->name) ? $user->name : '' ?>" required >
                                                 <label for="user_name">Username</label>
-                                                <i class="fa-solid fa-at"></i>
+                                                <i class="fa fa-user" aria-hidden="true"></i>
+                                                <!-- valid error -->
+                                                <?php if(isset($message['user_name'])) {viewValidateMessage($message['user_name']);}?>
                                             </div>
                                             <div class="input-group round float-label">
-                                                <input type="password" name="password" id="password" value="<?php if(isset($_COOKIE["password"])) { echo $_COOKIE["password"]; } ?>" required >
+                                                <input type="password" name="password" id="password" value="<?php echo isset($user->password) ? $user->password : '' ?>" required >
                                                 <label for="password">Password</label>
-                                                <i class="fa-solid fa-key"></i>
+                                                <i class="fa fa-lock" aria-hidden="true"></i>
+                                                <!-- valid error -->
+                                                <?php if(isset($message['password'])) {viewValidateMessage($message['password']);}?>
                                             </div>
                                             <div class="row row-collapse mb-2">
                                                 <div class="col col-6">
-                                                    <div class="input-group">
-                                                        <input type="checkbox" name="remember_pass" id="remember_pass" checked>
-                                                        <label for="remember_pass" class="is-small color-gray">Remember password</label>
+                                                    <div class="checkbox-group">
+                                                        <input type="checkbox" name="remember" id="remember" >
+                                                        <label for="remember" class="is-small color-gray">Remember me</label>
                                                     </div>
                                                 </div>
                                                 <div class="col col-6 text-right">
