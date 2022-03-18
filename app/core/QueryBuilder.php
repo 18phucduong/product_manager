@@ -154,7 +154,7 @@ trait QueryBuilder {
 		  }
 		  return $data;
 		} else {
-		  return false;
+		  return 'false';
 		}
 	}
 	public function delete() {
@@ -249,5 +249,23 @@ trait QueryBuilder {
         return  "INSERT INTO $this->table ( $tableColsText )
         VALUES ( $tableColsValue_text );";
 	}
+
+	public function pagination($postPerPages = null, $currentPage = 1) {
+		$table = $this->table;
+
+		$postPerPages = !empty( $postPerPages ) ? $postPerPages : 5;
+		$pageOffset = ($currentPage - 1) * $postPerPages;
+		$items =  $this->select(' *')->limit($postPerPages)->offset($pageOffset)->get();
+		$this->table = $table;
+		$totalItem = $this->select(' COUNT(id)')->get()[0]['COUNT(id)'];
+		$totalPage = ceil($totalItem/$postPerPages);
+		return [
+			'perPage' => $postPerPages,
+			'page'    => $currentPage,
+			'pages'    => $totalPage,
+			'items'   => $items
+		];
+	}
+
 }
 
