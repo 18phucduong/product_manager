@@ -49,11 +49,13 @@ class Product extends Model {
     }
     public function saveProduct($product, $productTags,$successRouteName){
         $productStatus =  Database::table('products')->insert([
-            'name' => $product['name'],
-            'slug' => $product['slug'],
-            'price' => intval($product['price']),
-            'sale_price' => !empty($product['sale_price']) ? intval($product['sale_price']) : null,
-            'image' => $product['image']
+            [
+                'name' => $product['name'],
+                'slug' => $product['slug'],
+                'price' => intval($product['price']),
+                'sale_price' => !empty($product['sale_price']) ? intval($product['sale_price']) : null,
+                'image' => $product['image']
+            ]
         ]);
         $product['id'] = Database::table('products')->newest()['id'];
         if($productStatus == false) { die("Can't insert new product"); }

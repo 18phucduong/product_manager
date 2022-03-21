@@ -18,8 +18,8 @@
                 <td class="text-center"><?php echo $product['id'] ?></td>
                 <td><?php echo $product['name']?></td>
                 <td data-field-name="image" ><?php echo renderImage($product['image'])?></td>
-                <td data-field-name="price"  class="text-center"><?php echo convertPrice($product['price'])?></td>
-                <td data-field-name="sale-price"  class="text-center"><?php echo convertPrice($product['sale_price'])?></td>
+                <td data-field-name="price"  class="text-center"><?php echo number_format($product['price'])?>  VNĐ</td>
+                <td data-field-name="sale-price"  class="text-center"><?php echo number_format($product['sale_price'])?>    VNĐ</td>
                 <td data-field-name="tags">
                     <?php
                         $tags = getRelationRowsManyToManyRelationship($product['id'], 'products', 'tags', 'product_tag');

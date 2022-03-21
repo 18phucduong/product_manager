@@ -154,7 +154,7 @@ trait QueryBuilder {
 		  }
 		  return $data;
 		} else {
-		  return 'false';
+		  return false;
 		}
 	}
 	public function delete() {
@@ -183,16 +183,35 @@ trait QueryBuilder {
 	}
 	public function insert($insertData, $multiple = false) {
 		$insertData = array_filter($insertData);
-		$sql = '';
+		$sql = "INSERT INTO $this->table (";
+
+		$tableCols = array_keys($insertData[0]);
+        $tableColsText = '';
+
+        for( $i=0; $i < count($tableCols); $i++ ) {
+            if($i < count($tableCols) -1 ) {
+                $tableColsText .= $tableCols[$i] . ', ';
+            }else{
+                $tableColsText .= $tableCols[$i];
+            }
+        }
+		$sql .= $tableColsText .= ' )';
 		
-		if( !$multiple) {
-			$sql .= $this->createInsertSql($insertData);
-		}else {
-			foreach($insertData as $insertItem) {
-				$sql .= $this->createInsertSql($insertItem);
+		$tableColsValueText = '';
+		foreach( $insertData as $item) {
+			$tableColsValueText .= '( ';
+			$tableColsValue = array_values($item);
+			for( $i=0; $i < count($tableColsValue); $i++ ) {
+				$value = sqlValueFormatting($tableColsValue[$i]);
+				if( empty($value) ) { $value = 'NULL'; }
+            	$tableColsValueText .= ($i < count($item) -1 ) ?  ( $value . ', ') : $value;	
 			}
+			$tableColsValueText .= '),';
 		}
+		$tableColsValueText = substr($tableColsValueText, 0, -1);
+		$sql .= ' VALUES' . $tableColsValueText . ';';
         $result = $this->query($sql);
+		
 
 		$this->resetQueryProperties();
         return $result;
@@ -207,14 +226,14 @@ trait QueryBuilder {
 
 	public function inDataBase($colName, $value){
         $result = $this->select('*')->where($colName, '=', $value)->get();
-        return $result != false;
+        return $result;
     }
 
 	public function findByCol($colName, $value) {
 		return $this->select('*')->where($colName, '=', $value)->get();
 	}
 	public function newest() {
-		return $this->select('*')->limit(1)->get()[0];
+		return $this->select('*')->orderBy('id', 'DESC')->limit(1)->get()[0];
 	}
 
 	private function resetQueryProperties() {
