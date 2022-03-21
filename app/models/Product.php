@@ -59,9 +59,9 @@ class Product extends Model {
         if($productStatus == false) { die("Can't insert new product"); }
         
         //insert file
-        $moveFileStatus = move_uploaded_file( $_FILES['image']['tmp_name'],  $product['image']);
+        $moveFileStatus = move_uploaded_file( $_FILES['image']['tmp_name'], getConfigs('upload_dir').'/'.$product['image']);
         if( !$moveFileStatus) {
-            Database::table('products')->where('id','=', intval($product['id']))->where()->delete();
+            Database::table('products')->where('name','=', $product['name'])->delete();
             die("Can't move Product Image"); 
         }
         

@@ -134,7 +134,7 @@ trait QueryBuilder {
 		}
 
 		if( isset( $this->orderBy  ) ) { 
-			$oderBy =  $this->orderBy['column'];
+			$oderBy =  $this->orderBy['col'];
 			$oder =  $this->orderBy['order'];
 			$sql .= " ORDER BY $oderBy $oder ";
 		}
@@ -255,7 +255,7 @@ trait QueryBuilder {
 
 		$postPerPages = !empty( $postPerPages ) ? $postPerPages : 5;
 		$pageOffset = ($currentPage - 1) * $postPerPages;
-		$items =  $this->select(' *')->limit($postPerPages)->offset($pageOffset)->get();
+		$items =  $this->select(' *')->orderBy('id', 'DESC')->limit($postPerPages)->offset($pageOffset)->get();
 		$this->table = $table;
 		$totalItem = $this->select(' COUNT(id)')->get()[0]['COUNT(id)'];
 		$totalPage = ceil($totalItem/$postPerPages);
@@ -266,6 +266,5 @@ trait QueryBuilder {
 			'items'   => $items
 		];
 	}
-
 }
 

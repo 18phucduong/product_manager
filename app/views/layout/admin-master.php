@@ -16,8 +16,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?php echo getUrlFromBasePath('/assets/css/library.css')?>">
     <link rel="stylesheet" href="<?php echo getUrlFromBasePath('/assets/css/admin.css')?>">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script  src="<?php echo getUrlFromBasePath('/assets/js/app.js')?>" type="text/javascript"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">    
+    <script  src="<?php echo getUrlFromBasePath('/assets/js/'.router()->currentRoute.'.js')?>" type="text/javascript"></script>
     <title><?php echo $page['title']?></title>
 </head>
 <body>
