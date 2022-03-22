@@ -17,7 +17,7 @@ class Router {
 	}
 
 	private function getRequestUrl() {
-		$basePath = getConfigs()['base_path'];
+		$basePath = getConfigs('base_path');
 		$url = $_SERVER['REQUEST_URI'];
 		$url = str_replace($basePath, '', $url);
 		return $url;
@@ -52,12 +52,15 @@ class Router {
 		$routes = $this->routes;
 		$methodParams = [];
 		foreach( $routes as $routeName => $route) {
+
+			$isAPIRoute = $this->checkAPIRoute($routeName);
+			// echo $isAPIRoute;
 			
 			if( $this->isInvalidMethod($route['method'], $requestMethod) ) {continue;}
 			if( $this->hasNoOpenParamCharacter($route['url'])) {
 		    	if( $this->isValidRequestUrl($route['url'], $requestUrl) ){
 					$this->currentRoute = $routeName;
-					$this->callMethod( $route['action'], []);
+					$this->callMethod( $isAPIRoute, $route['action'], []);
 					return;
 		    	}
 		    	continue;
@@ -72,25 +75,29 @@ class Router {
 			foreach( $routeParams as $index => $param) {
 				if( preg_match('/^{\w+}$/', $param) ) { $methodParams[] = $requestParams[$index]; }
 			}
-			$this->callMethod($route['action'], $methodParams);
+			
+			$this->callMethod($isAPIRoute,$route['action'], $methodParams);
 			return;	
 		}
 		die("404 page not found");
 	}
-	private function callMethod( $action, $params = [] ) {
+	private function callMethod($isAPIRoute, $action, $params = [] ) {
 		if( is_callable( $action ) ) {		
 			call_user_func_array($action, $params);
 			return;
 		}
 		if( is_string( $action ) ) {
+			
 			$className = explode( '@', $action )[0];
-			$method_name = explode( '@', $action )[1];
+			$methodName = explode( '@', $action )[1];
 			$this->currentController = $className;
-			$classNameInNameSpace = 'app\\controllers\\'. $className;				
+			
+			$classNameInNameSpace = $isAPIRoute ? 'app\\controllers\\api\\'. $className : 'app\\controllers\\'. $className;
+
 			if( !class_exists($classNameInNameSpace) ) { die("not found this Controller"); }
 
-			if( !method_exists( $classNameInNameSpace, $method_name ) ) { die("this method is not exists"); }
-			call_user_func_array([new $classNameInNameSpace, $method_name ], $params);
+			if( !method_exists( $classNameInNameSpace, $methodName ) ) { die("this method is not exists"); }
+			call_user_func_array([new $classNameInNameSpace, $methodName ], $params);
 		}else {
 			die("this action is not found");
 		}
@@ -123,5 +130,9 @@ class Router {
 	}
 	private function run() {
 		$this->mapRouters();
+	}
+
+	function checkAPIRoute($routeName) {
+		return explode('.', $routeName)[0] == 'api';
 	}
 }

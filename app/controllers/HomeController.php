@@ -11,17 +11,6 @@ class HomeController {
 
     public function index() {
 
-     
-        
-
-        // $sql = "SELECT t.*
-        // FROM products p
-        // JOIN product_tag pt
-        // ON p.id = pt.product_id
-        // JOIN tags t
-        // ON pt.tag_id = t.id
-        // WHERE p.id=46";
-
         $data = [
             'page' => [
                 'title' => '',

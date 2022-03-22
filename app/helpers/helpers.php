@@ -1,6 +1,9 @@
 <?php
 
 // input value in SQL
+
+use app\core\Database;
+
 function sqlValueFormatting($value) {
     switch (gettype($value)) {
         case "string":
@@ -176,9 +179,7 @@ function redirectRoute($routeName, $data = null) {
     if ( $data != null) { 
 
        $_SESSION['dataPage'] =  $data;
-    }	
-	$_SESSION['dataPage'] =  $data;
-	
+    }		
 	header('Location: ' . $url, true);
 	die();
 }
@@ -197,4 +198,50 @@ function convertSizeToNumber(string $string) {
 		return floatval($number) * 1024;
 	}
 	return false;
+}
+function renderImage($imageName, $alt = null) {
+	$imageUrl = !empty($imageName) ? 'assets/images/'.$imageName : 'assets/images/black-dog.jpg';
+
+	$altText = empty( $alt ) ? "alt='$alt'" : '';
+	echo "<img src='$imageUrl'  $altText>";
+}
+
+function convertPrice($price) {
+	$price = intval($price);
+	return $price/1000 . ' K';
+}
+
+function pagination($paginationData, $class = 'justify-c-center') {
+	$currentPage =intval($paginationData['page']);
+	$pages = intval($paginationData['pages']);
+	$nextPage = $currentPage + 1;
+	$prevPage = $currentPage - 1;
+	?>
+		<nav id="paginate" >
+			<ul class="paginate d-flex <?php echo $class;?>">
+			<li class="pagi-item prev-item" <?php if($currentPage > 1) { echo "data-page=$prevPage"; }?>><span>Prev</span></li>
+				<?php
+				for( $page = 1; $page <= $pages; $page++) {
+					// echo $currentPage;
+					$active = $page == $currentPage ? 'active' : '';
+					echo "<li class='pagi-item $active' data-page='$page'><span>$page</span></li>";
+				}
+				?>
+				<li class="pagi-item next-item" <?php if($currentPage < $pages) { echo "data-page=$nextPage"; }?>><span>Next</span></li>
+			</ul>
+		</nav>
+	<?php
+}
+function getRelationRowsManyToManyRelationship($fromId,$fromTable, $toTable, $relationTable) {
+	$fromId = intval($fromId);
+	// $fromModel = substr_replace($fromTable, "", -1);
+	// $toModel = substr_replace($toTable, "", -1);
+	$sql = "SELECT $toTable.*
+        FROM $fromTable
+        JOIN $relationTable 
+        ON $fromTable.id = $relationTable.product_id
+        JOIN $toTable $toTable
+        ON $relationTable.tag_id = $toTable.id
+        WHERE $fromTable.id=$fromId";
+	return Database::table($fromTable)->getData($sql);
 }
